@@ -1,7 +1,9 @@
 const readline = require('readline-sync');
 const myCOS = require('ibm-cos-sdk');
+const fs = require('fs');
 var config = require('./config.js').config
 var cosClient = new myCOS.S3(config);
+
 async function getBucketContents(bucketName) {
     console.log(`Retrieving bucket contents from: ${bucketName}`);
     return cosClient.listObjects(
@@ -20,21 +22,26 @@ async function getBucketContents(bucketName) {
         console.error(`ERROR: ${e.code} - ${e.message}\n`);
     });
 }
-// function getItem(bucketName, itemName) {
-//     console.log(`Retrieving item from bucket: ${bucketName}, key: ${itemName}`);
-//     return cos.getObject({
-//         Bucket: bucketName, 
-//         Key: itemName
-//     }).promise()
-//     .then((data) => {
-//         if (data != null) {
-//             console.log('File Contents: ' + Buffer.from(data.Body).toString());
-//         }    
-//     })
-//     .catch((e) => {
-//         console.error(`ERROR: ${e.code} - ${e.message}\n`);
-//     });
-// }
+async function getItem(bucketName, itemName) {
+    console.log(`Retrieving item from bucket: ${bucketName}, key: ${itemName}`);
+    return cosClient.getObject({
+        Bucket: bucketName, 
+        Key: itemName
+    }).promise()
+    .then((data) => {
+        if (data != null) {
+            try { 
+                fs.writeFileSync(itemName, Buffer.from(data.Body).toString())
+                console.log("File written successfully"); 
+              } catch(err) { 
+                console.error(err); 
+              }  
+        }    
+    })
+    .catch((e) => {
+        console.error(`ERROR: ${e.code} - ${e.message}\n`);
+    });
+}
 var main = async function(){
     do{  
         var option;
@@ -49,6 +56,7 @@ var main = async function(){
                 console.log("you've selected option 1\n\n\n\n\n");
                 //call flowlogs backend function
                 await getBucketContents("flowlog-sub-ryan")
+                await getItem("flowlog-sub-ryan","00000003.json")
                 break;
 
             case "2":
