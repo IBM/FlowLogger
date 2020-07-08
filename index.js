@@ -3,6 +3,22 @@ const myCOS = require('ibm-cos-sdk');
 const fs = require('fs');
 var config = require('./config.js').config
 var cosClient = new myCOS.S3(config);
+var getCollectors = require("./backend/getFlowLogs");
+const timer = ms => new Promise( res => setTimeout(res, ms));
+
+
+var collectors="";
+getCollectors();
+
+
+
+
+console.log(collectors);
+
+
+
+
+
 
 async function getBucketContents(bucketName) {
     console.log(`Retrieving bucket contents from: ${bucketName}`);
@@ -47,7 +63,8 @@ var main = async function(){
         var option;
         option = readline.question(`choose option
         1. get flowlogs
-        2. exit
+        2. list flowlogs collectors
+        3. exit
         \n`);
     
         switch(option) {
@@ -60,6 +77,10 @@ var main = async function(){
                 break;
 
             case "2":
+            await getCollectors();
+                break;
+
+            case "3":
                 console.log("exiting...\n\n\n\n\n");
                 option=-1;
                 break;
@@ -72,3 +93,4 @@ var main = async function(){
     }while(option!=-1);
 }
 main();
+module.exports.collectors = "";
