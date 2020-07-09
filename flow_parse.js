@@ -8,10 +8,11 @@ function date_time(date){
 
 //Outputs flow logs that match the filter requirement of an attribute given by the user
 function filter_by(flog,attribute, filter){
-    console.log(flog)
-    console.log(flog.flow_logs[0][attribute].toString())
+
+    //console.log(flog)
+    //console.log(flog.flow_logs[0][attribute].toString())
     for(var i=0;i<flog.number_of_flow_logs;i++){
-        if(flog.flow_logs[i][attribute].toString()===filter){
+        if(flog.flow_logs[i][attribute].toString()===filter.toString()){
             console.log(flog.flow_logs[i])
         }
     }
@@ -38,7 +39,7 @@ function input(){
         }
         try {
             flow_log = JSON.parse(jsonString)
-            console.log(flow_log)
+            //console.log(flow_log)
             main()
             return
 
@@ -71,8 +72,18 @@ function main(){
                 console.log(flow_log)
                 break;
             case "2":
-                console.log("you've selected option 2:\n\n");
+                const keys = []
+                console.log("Attributes to filter by: \n\n");
+                var count = 0;
+                for(var k in flow_log.flow_logs[0]){
+                    count+=1;
+                    console.log(count+". "+k)
+                    keys.push(k)
+                }
                 var attribute = readline.question("Choose an attribute to filter by: ")
+                if(attribute.length<=2){
+                    attribute = keys[attribute-1]
+                }
                 var filter = readline.question("Choose the value of that attribute you want to filter by: ") 
                 filter_by(flow_log,attribute,filter);
                 break;
