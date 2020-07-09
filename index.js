@@ -18,13 +18,14 @@ var main = async function(){
     
         switch(option) {
             case "1":
-                var apiKey=readline.question(`Please enter your API Key:
-                    \n`);
-                var bucketName = ""
-                // Get bucketName and region endpoint
-                output = await getCollectors(apiKey);
-                bucketName = output[0] 
-                config.apiKeyId=apiKey
+                if(config.apiKeyId==''){
+                    var apiKey=readline.question(`Please enter your API Key:
+                        \n`);
+                    // Get bucketName and region endpoint
+                    config.apiKeyId=apiKey
+                }
+                var output = await getCollectors(apiKey);
+                var bucketName = bucketName = output[0]
                 config.endpoint=output[1]
                 cosClient = new myCOS.S3(config)
                 // Retrieve all items from the COS bucket

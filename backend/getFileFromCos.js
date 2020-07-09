@@ -25,7 +25,7 @@ async function getItem(bucketName, itemName,cosClient) {
     .then((data) => {
         if (data != null) {
             try { 
-                fs.writeFileSync(itemName, Buffer.from(data.Body).toString())
+                fs.writeFileSync("./logs/"+itemName, Buffer.from(data.Body).toString())
                 console.log("File written successfully"); 
               } catch(err) { 
                 console.error(err); 
