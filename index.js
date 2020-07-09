@@ -8,7 +8,7 @@ const timer = ms => new Promise( res => setTimeout(res, ms));
 
 
 var collectors="";
-getCollectors();
+
 
 
 
@@ -61,7 +61,7 @@ async function getItem(bucketName, itemName) {
 var main = async function(){
     do{  
         var option;
-        option = readline.question(`choose option
+        option = readline.question(`    choose option
         1. get flowlogs
         2. list flowlogs collectors
         3. exit
@@ -77,7 +77,7 @@ var main = async function(){
                 break;
 
             case "2":
-            await getCollectors();
+             await getCollectors();
                 break;
 
             case "3":
