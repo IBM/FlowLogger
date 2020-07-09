@@ -1,7 +1,7 @@
 const readline = require('readline-sync');
 var access_token="";
 var refresh_token="";
-var apikey=require('../config.js').config.apiKeyId;
+var apikey;
 var axios=require('axios');
 var qs=require('qs');
 var regionEndpoint="";
@@ -27,10 +27,10 @@ async function getTokens(){
    
 }
 //collecting available flow log collectors for the us-east region
-async function getCollectors(){
-
+async function getCollectors(apiKey){
+    apikey=apiKey
     await getTokens();
-var region=await getRegion();
+    var region=await getRegion();
     await axios({
         method: 'get',
         headers:{ 'Authorization': "Bearer "+access_token},
@@ -43,10 +43,6 @@ var region=await getRegion();
             console.log(error)
             return null;
         });
-        bucketName=readline.question(`
-        Type in bucket name
-            \n`);
-        //console.log([bucketName,regionEndpoint]);
         return [bucketName,regionEndpoint];
 }
 //getting region
@@ -87,10 +83,24 @@ async function getRegion(){
 }
 //styling the json data
 async function formatCollectors(collectors){   
-   
+    var i=1;
     console.log("name        bucket");
     for(var item in collectors){
-        console.log(collectors[item].name+"  "+collectors[item].storage_bucket.name/*+"  "+collectors[item].target.name+" "+collectors[item].target.resource_type*/);
+        console.log(i+". "+collectors[item].name+"  "+collectors[item].storage_bucket.name/*+"  "+collectors[item].target.name+" "+collectors[item].target.resource_type*/);
+        i++
+    }
+    if(collectors.length==1)
+        bucketName = collectors[0].storage_bucket.name
+    else{
+        var option=1
+        do{
+            if(option<1||option>collectors.length)
+                console.log("Invalid option.\n")
+            option=readline.question(`
+            Select a bucket from 1 to `+collectors.length+`:
+                \n`);
+        }while(option<1||option>collectors.length)
+        bucketName = collectors[option-1].storage_bucket.name
     }
     
 }
