@@ -4,21 +4,6 @@ const fs = require('fs');
 var config = require('./config.js').config
 var cosClient = new myCOS.S3(config);
 var getCollectors = require("./backend/getFlowLogs");
-const timer = ms => new Promise( res => setTimeout(res, ms));
-
-
-var collectors="";
-
-
-
-
-
-console.log(collectors);
-
-
-
-
-
 
 async function getBucketContents(bucketName) {
     console.log(`Retrieving bucket contents from: ${bucketName}`);
@@ -77,7 +62,7 @@ var main = async function(){
                 break;
 
             case "2":
-             await getCollectors();
+             console.log(await getCollectors());//return bucket name and bucket's endpoint
                 break;
 
             case "3":

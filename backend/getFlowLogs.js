@@ -4,6 +4,8 @@ var refresh_token="";
 var apikey=require('../config.js').config.apiKeyId;
 var axios=require('axios');
 var qs=require('qs');
+var regionEndpoint="";
+var bucketName="";
 
 //getting token to perform api requests
 async function getTokens(){
@@ -17,7 +19,7 @@ async function getTokens(){
             access_token=res.data.access_token;
             refresh_token=res.data.refresh_token;
             
-             await getCollectors();
+             //await getCollectors();
       
         }).catch(error => {
     console.log(error);
@@ -26,6 +28,8 @@ async function getTokens(){
 }
 //collecting available flow log collectors for the us-east region
 async function getCollectors(){
+
+    await getTokens();
 var region=await getRegion();
     await axios({
         method: 'get',
@@ -39,7 +43,11 @@ var region=await getRegion();
             console.log(error)
             return null;
         });
-       
+        bucketName=readline.question(`
+        Type in bucket name
+            \n`);
+        //console.log([bucketName,regionEndpoint]);
+        return [bucketName,regionEndpoint];
 }
 //getting region
 async function getRegion(){
@@ -72,17 +80,20 @@ async function getRegion(){
                 console.log("Invalid region");
                 loop=true;
         }
+        regionEndpoint='s3.'+region+'.cloud-object-storage.appdomain.cloud';
     }while(loop==true);
     
     return region;
 }
 //styling the json data
 async function formatCollectors(collectors){   
-    console.log(collectors);
-    console.log("name        bucket             target type");
+   
+    console.log("name        bucket");
     for(var item in collectors){
-        console.log(collectors[item].name+"  "+collectors[item].storage_bucket.name+"  "+collectors[item].target.name+" "+collectors[item].target.resource_type);
+        console.log(collectors[item].name+"  "+collectors[item].storage_bucket.name/*+"  "+collectors[item].target.name+" "+collectors[item].target.resource_type*/);
     }
+    
 }
+ 
 
-module.exports = getTokens;
+module.exports = getCollectors;
