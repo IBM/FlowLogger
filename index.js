@@ -8,7 +8,7 @@ var cosClient;
 const getCollectors = require("./backend/getFlowLogs");
 const getCOS = require("./backend/getFileFromCos");
 
-var main = async function () {
+const main = async function () {
   do {
     var option;
     option = readline.question(`choose option
