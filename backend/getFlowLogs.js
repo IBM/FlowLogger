@@ -3,7 +3,7 @@ var access_token = "";
 var refresh_token = "";
 var apikey;
 var axios = require("axios");
-var qs = require("qs");
+const qs = require("qs");
 var regionEndpoint = "";
 var bucketName = "";
 
