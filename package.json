@@ -1,0 +1,13 @@
+{
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.ibm.com/GCAT/acl-logs.git"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "ibm-cos-sdk": "^1.6.1",
+    "qs": "^6.9.4",
+    "readline-sync": "^1.4.10"
+  }
+}
