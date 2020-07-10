@@ -2,7 +2,7 @@ const readline = require("readline-sync");
 var access_token = "";
 var refresh_token = "";
 var apikey;
-var axios = require("axios");
+const axios = require("axios");
 const qs = require("qs");
 var regionEndpoint = "";
 var bucketName = "";
