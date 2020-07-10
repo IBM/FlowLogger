@@ -1,3 +1,4 @@
+//main
 const readline = require('readline-sync');
 const myCOS = require('ibm-cos-sdk');
 var config = {
