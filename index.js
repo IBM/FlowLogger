@@ -19,7 +19,7 @@ var main = async function () {
     switch (option) {
       case "1":
         if (config.apiKeyId == "") {
-          var apiKey = readline.question(`Please enter your API Key:
+          config.apiKeyId = readline.question(`Please enter your API Key:
                         \n`);
           // Get bucketName and region endpoint
           config.apiKeyId = apiKey;
