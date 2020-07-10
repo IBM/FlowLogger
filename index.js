@@ -4,7 +4,6 @@ const config = {
   endpoint: "",
   apiKeyId: "",
 };
-var cosClient;
 const getCollectors = require("./backend/getFlowLogs");
 const getCOS = require("./backend/getFileFromCos");
 
@@ -21,13 +20,13 @@ const main = async function () {
         if (config.apiKeyId == "") {
           config.apiKeyId = readline.question(`Please enter your API Key:
                         \n`);
-          // Get bucketName and region endpoint
           config.apiKeyId = apiKey;
         }
-        var output = await getCollectors(apiKey);
-        var bucketName = (bucketName = output[0]);
-        config.endpoint = output[1];
-        cosClient = new myCOS.S3(config);
+        // Get bucketName and region endpoint
+        const collectors = await getCollectors(config.apiKeyId);
+        const bucketName = collectors[0];
+        config.endpoint = collectors[1];
+        var cosClient = new myCOS.S3(config);
         // Retrieve all items from the COS bucket
         await getCOS.getBucketContents(bucketName, cosClient);
         break;

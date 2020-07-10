@@ -24,8 +24,6 @@ async function getTokens() {
     .then(async (res) => {
       access_token = res.data.access_token;
       refresh_token = res.data.refresh_token;
-
-      //await getCollectors();
     })
     .catch((error) => {
       console.log(error);
