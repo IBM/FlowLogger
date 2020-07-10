@@ -20,7 +20,6 @@ const main = async function () {
         if (config.apiKeyId == "") {
           config.apiKeyId = readline.question(`Please enter your API Key:
                         \n`);
-          config.apiKeyId = apiKey;
         }
         // Get bucketName and region endpoint
         const collectors = await getCollectors(config.apiKeyId);
