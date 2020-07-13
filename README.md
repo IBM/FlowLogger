@@ -13,7 +13,7 @@ When traffic is denied to a VPC by ACLs or security groups, the only way to inve
 - Run `npm install ibm-cos-sdk` in the project directory
 - Run `npm install qs` in the project directory
 
-- Use `npm install -g .` to package the program as a global command
+- Use `sudo npm install -g .` to package the program as a global command
 - Use `flowlog get` to pull the newest flowlogs
 - Use `flowlog parse` to parse the flowlogs
 
