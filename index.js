@@ -40,5 +40,5 @@ const main = async function () {
     }
   } while (option != -1);
 };
-main();
+module.exports.main = main;
 module.exports.collectors = "";

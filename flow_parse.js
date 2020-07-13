@@ -165,4 +165,4 @@ function main(){
 
     }while(option!=-1);
 }
-input()
+module.exports.input = input
