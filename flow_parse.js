@@ -1,4 +1,3 @@
-
 //Outputs Date and Time in a more readable format
 function date_time(date){
     var arr = date.split("T");
@@ -44,29 +43,6 @@ function time_elapsed(start_date,end_date){
 
 }
 var flow_log;
-
-//reads in json file
-function input(){
-    const fs = require('fs');
-    const { time } = require('console');
-    fs.readFile('./flow-log-1.json', 'utf8', (err, jsonString) => {
-        if (err) {
-            console.log("Error reading file from disk:", err)
-            return
-        }
-        try {
-            flow_log = JSON.parse(jsonString)
-            //console.log(flow_log)
-            main()
-            return
-
-    } catch(err) {
-            console.log('Error parsing JSON string:', err)
-            return
-
-        }
-    })
-}
 
 function for_mat(flog,tabs){
     var s = ""
@@ -165,4 +141,4 @@ function main(){
 
     }while(option!=-1);
 }
-module.exports.input = input
+module.exports.input = main
