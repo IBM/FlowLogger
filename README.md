@@ -2,6 +2,7 @@
 
 When traffic is denied to a VPC by ACLs or security groups, the only way to investigate is to look at flow logs. Currently, flow logs are hard to read and manage. We are going to build a tool that runs SQL queries on the logs to generate important information in a readable format.
 
+
 ## Instructions
 
 - Must have node js installed.
@@ -12,6 +13,7 @@ When traffic is denied to a VPC by ACLs or security groups, the only way to inve
 - Run `npm install axios` in the project directory
 - Run `npm install ibm-cos-sdk` in the project directory
 - Run `npm install qs` in the project directory
+
 
 - Use `sudo npm install -g .` to package the program as a global command
 - Use `flowlog get` to pull the newest flowlogs
