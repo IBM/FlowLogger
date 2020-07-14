@@ -6,6 +6,8 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "cli-color": "^2.0.0",
+    "colors": "^1.4.0",
     "ibm-cos-sdk": "^1.6.1",
     "qs": "^6.9.4",
     "readline-sync": "^1.4.10"
