@@ -8,7 +8,7 @@ const getCollectors = require("./backend/getFlowLogs");
 const getCOS = require("./backend/getFileFromCos");
 const getLogErrors=require("./backend/getLogErrors");
 
-const main = async function () {
+const main = async function () {getLogErrors();/*
   do {
     var option;
     option = readline.question(`choose option
@@ -44,7 +44,7 @@ const main = async function () {
     default:
         console.log("invalid option\n\n\n\n\n");
     }
-  } while (option != -1);
+  } while (option != -1);*/
 };
 main();
 module.exports.collectors = "";
