@@ -12,7 +12,7 @@ When traffic is denied to a VPC by ACLs or security groups, the only way to inve
 - Run `npm install axios ibm-cos-sdk qs` in the project directory
 - Run `npm install chalk clear figlet` in the project directory
 
-- Use `npm install -g .` to package the program as a global command
+- Use `npm install -g .` to package the program as a global command (Use `sudo npm install -g .` if you do not have permissions)
 - Use `flowlog get` to pull the newest flowlogs
 - Use `flowlog parse` to parse the flowlogs
 
