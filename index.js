@@ -6,14 +6,14 @@ const config = {
 };
 const getCollectors = require("./backend/getFlowLogs");
 const getCOS = require("./backend/getFileFromCos");
-const getLogErrors=require("./backend/getLogErrors");
 
-const main = async function () {getLogErrors();/*
+
+
+const main = async function () {
   do {
     var option;
     option = readline.question(`choose option
         1. get flowlogs
-        2. scan logs
         q. exit
         \n`);
 
@@ -32,10 +32,6 @@ const main = async function () {getLogErrors();/*
         await getCOS.getBucketContents(bucketName, cosClient);
         break;
 
-    case "2":
-        getLogErrors();
-        break;
-
     case "q":
         console.log("exiting...\n\n\n\n\n");
         option = -1;
@@ -44,7 +40,7 @@ const main = async function () {getLogErrors();/*
     default:
         console.log("invalid option\n\n\n\n\n");
     }
-  } while (option != -1);*/
+  } while (option != -1);
 };
-main();
+module.exports.main = main;
 module.exports.collectors = "";

@@ -1,8 +1,11 @@
 const colors = require('colors');
 const filter_by=require("../flow_parse.js");
+
 function getLogErrors(){
+    
     const file=require("../logs/file.json");
     var rejectCount=0;
+
     for (var i=0;i<file.flow_logs.length;i++) {
         if(file.flow_logs[i].action=='rejected'){
             rejectCount++;
@@ -18,4 +21,5 @@ function getLogErrors(){
         console.log(("No Errors were detected in the flowlogs\n\n\n\n").green);
     }
 }
+
 module.exports = getLogErrors;

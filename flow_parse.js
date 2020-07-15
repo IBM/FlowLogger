@@ -165,5 +165,5 @@ function main(){
 
     }while(option!=-1);
 }
-input()
+module.exports.input = input;
 module.exports = filter_by;
