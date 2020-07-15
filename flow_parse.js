@@ -1,4 +1,3 @@
-
 //Outputs Date and Time in a more readable format
 function date_time(date){
     var arr = date.split("T");
@@ -165,4 +164,4 @@ function main(){
 
     }while(option!=-1);
 }
-input()
+module.exports.input = input
