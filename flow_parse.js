@@ -176,4 +176,5 @@ function main(){
 
     }while(option!=-1);
 }
-module.exports.input = input
+module.exports.input = input;
+module.exports = filter_by;

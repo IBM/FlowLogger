@@ -10,9 +10,8 @@ When traffic is denied to a VPC by ACLs or security groups, the only way to inve
 - Install node js with `brew install node`.
 
 - Run `npm install readline-sync` in the project directory. This package allows an easy way to obtain user input.
-- Run `npm install axios` in the project directory
-- Run `npm install ibm-cos-sdk` in the project directory
-- Run `npm install qs` in the project directory
+- Run `npm install axios ibm-cos-sdk qs` in the project directory
+- Run `npm install chalk clear figlet` in the project directory
 
 
 - Use `sudo npm install -g .` to package the program as a global command

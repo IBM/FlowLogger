@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 const readline = require("readline-sync");
-let getFlowLog = require('../index.js').main
-let parse = require('../flow_parse.js').input
+let getFlowLog = require('../index.js').main;
+let parse = require('../flow_parse.js').input;
+let getLogErrors = require('../backend/getLogErrors.js');
 switch(process.argv[2]){
     case "get":
         getFlowLog()
@@ -10,12 +11,15 @@ switch(process.argv[2]){
     case "parse":
         parse()
         break
+    case "scan":
+        getLogErrors()
+        break
     default:
         do{
             var option = readline.question(`choose option
             1. (get) newest flowlogs
             2. (Parse) flowlogs stored
-            3. (exit)
+            3. (scan) check for errors
             \n`);
             console.log(option)
             switch (option) {
@@ -25,7 +29,10 @@ switch(process.argv[2]){
                 case "2": case "parse": case "Parse":
                     parse()
                     break
-                case "3":
+                case "3": case "scan": case "Scan":
+                    getLogErrors()
+                    break
+                case "4": 
                     option = -1
                     break;
                 default:
