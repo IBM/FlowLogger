@@ -1,32 +1,35 @@
 #!/usr/bin/env node
-const chalk = require('chalk');
-const clear = require('clear');
-const figlet = require('figlet');
-const { input } = require('../flow_parse.js');
 
-clear();
-
-console.log(
-  chalk.yellow(
-    figlet.textSync('Flow Log Reader', { horizontalLayout: 'full' })
-  )
-);
-
-let getFlowLog = require('../index.js').main;
-let filter = require('../flow_parse.js').input;
-let getLogErrors = require('../backend/getLogErrors.js');
+const readline = require("readline-sync");
+let getFlowLog = require('../index.js').main
+let parse = require('../flow_parse.js').input
 switch(process.argv[2]){
     case "get":
-        console.log(process.argv);
-        getFlowLog();
-        break;
+        getFlowLog()
+        break
     case "parse":
-        filter();
-        break;
-    case "scan":
-        getLogErrors();
-        break;
-    
+        parse()
+        break
     default:
-        console.log("Invalid command.")
+        do{
+            var option = readline.question(`choose option
+            1. (get) newest flowlogs
+            2. (Parse) flowlogs stored
+            3. (exit)
+            \n`);
+            console.log(option)
+            switch (option) {
+                case "1": case "get": case "Get":
+                    getFlowLog()
+                    break
+                case "2": case "parse": case "Parse":
+                    parse()
+                    break
+                case "3":
+                    option = -1
+                    break;
+                default:
+                    console.log("invalid option\n");
+            }
+        } while (option != -1);
 }

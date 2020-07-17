@@ -1,4 +1,3 @@
-
 //Outputs Date and Time in a more readable format
 function date_time(date){
     var arr = date.split("T");
