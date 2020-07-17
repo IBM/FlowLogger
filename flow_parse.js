@@ -46,6 +46,7 @@ function time_elapsed(start_date,end_date){
 var flow_log;
 
 //reads in json file
+//TODO: add implementation which filters through each of the json files rather than individual ones
 function input(){
     const fs = require('fs');
     const { time } = require('console');
@@ -141,8 +142,19 @@ function main(){
                     if(attribute.length<=2){
                         attribute = keys[attribute-1]
                     }
+                    const list_val = []
                     attributes.push(attribute)
+                    for(var j=0;j<flow_log.flow_logs.length;j++){
+                        list_val.push(flow_log.flow_logs[j][attribute])
+                    }
+                    var unique = list_val.filter((v, s, a) => a.indexOf(v) === s);
+                    for(var j=0;j<unique.length;j++){
+                        console.log(String.fromCharCode(97 + j)+". "+unique[j])
+                    }
                     var filter = readline.question(i+1+". Choose the value of that attribute you want to filter by: ")
+                    if(filter>='a'&&filter<='z'){
+                        filter = unique[filter.charCodeAt(0) - 97]
+                    }
                     filters.push(filter)
                 }
                 filter_by(flow_log, attributes,filters);
