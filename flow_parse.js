@@ -159,28 +159,31 @@ function main(){
                 }
                 const attributes = [];
                 const filters = [];
-                var amt = readline.question("How many attributes do you want to filter by?")
-                for(var i=0;i<amt;i++){
-                    var attribute = readline.question(i+1+". Choose an attribute to filter by: ")
-                    if(attribute.length<=2){
-                        attribute = keys[attribute-1]
+                var amt = readline.question("How many attributes do you want to filter by? Press q to quit")
+                if(amt!='q'){
+                    for(var i=0;i<amt;i++){
+                        var attribute = readline.question(i+1+". Choose an attribute to filter by: ")
+                        if(attribute.length<=2){
+                            attribute = keys[attribute-1]
+                        }
+                        const list_val = []
+                        attributes.push(attribute)
+                        for(var j=0;j<flow_log.flow_logs.length;j++){
+                            list_val.push(flow_log.flow_logs[j][attribute])
+                        }
+                        var unique = list_val.filter((v, s, a) => a.indexOf(v) === s);
+                        for(var j=0;j<unique.length;j++){
+                            console.log(String.fromCharCode(97 + j)+". "+unique[j])
+                        }
+                        var filter = readline.question(i+1+". Choose the value of that attribute you want to filter by: ")
+                        if(filter>='a'&&filter<='z'){
+                            filter = unique[filter.charCodeAt(0) - 97]
+                        }
+                        filters.push(filter)
                     }
-                    const list_val = []
-                    attributes.push(attribute)
-                    for(var j=0;j<flow_log.flow_logs.length;j++){
-                        list_val.push(flow_log.flow_logs[j][attribute])
-                    }
-                    var unique = list_val.filter((v, s, a) => a.indexOf(v) === s);
-                    for(var j=0;j<unique.length;j++){
-                        console.log(String.fromCharCode(97 + j)+". "+unique[j])
-                    }
-                    var filter = readline.question(i+1+". Choose the value of that attribute you want to filter by: ")
-                    if(filter>='a'&&filter<='z'){
-                        filter = unique[filter.charCodeAt(0) - 97]
-                    }
-                    filters.push(filter)
+                    filter_by(flow_log, attributes,filters);
+
                 }
-                filter_by(flow_log, attributes,filters);
                 break;
 
             case "3":
@@ -202,5 +205,7 @@ function main(){
 }
 
 input()
-module.exports.input = input;
-module.exports = filter_by;
+//module.exports.input = input;
+//module.exports = filter_by;
+
+module.exports = input;
