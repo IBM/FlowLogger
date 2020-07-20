@@ -4,7 +4,9 @@ function date_time(date){
     var arr = date.split("T");
     return "Date: "+arr[0] + " Time: "+arr[1];
 }
+const readline = require('readline-sync');
 
+var input_file
 
 //Outputs flow logs that match the filter requirement of an attribute given by the user
 
@@ -50,7 +52,9 @@ var flow_log;
 function input(){
     const fs = require('fs');
     const { time } = require('console');
-    fs.readFile('./flow-log-1.json', 'utf8', (err, jsonString) => {
+    input_file = readline.question("Input the name of the flow log")
+    input_file = "./log/"+input_file
+    fs.readFile(input_file, 'utf8', (err, jsonString) => {
         if (err) {
             console.log("Error reading file from disk:", err)
             return
@@ -107,11 +111,11 @@ function output(file_name){
 
 
 function main(){
-    const readline = require('readline-sync');
 
     do{  
 
         var option;
+
         option = readline.question(`choose option
         1. print flowlogs
         2. filter flow logs by attributes
