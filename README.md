@@ -1,4 +1,6 @@
-# Flowlogger
+# FlowLogger
+
+A VPC Flow Logs support plugin created by the interns of the GCAT team.
 
 ## Contents
 
