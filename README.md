@@ -14,6 +14,7 @@ _Please note that this plug-in is in the **EXPERIMENTAL** phase and there is no 
 
 ## Flow Logs 
 Capture information about the IP traffic going to and from network interfaces in your VPC and are stored in a Cloud Object Storage(COS) bucket 
+
 With this information you are able to: 
 - Troubleshoot why specific traffic isn't reaching an instance, which helps to diagnose restrictive security group rules.
 - Monitor the traffic that is reaching your instance.
