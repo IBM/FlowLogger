@@ -115,7 +115,7 @@ function main(){
         1. print flowlogs
         2. filter flow logs by attributes
         3. save to a file
-        4. exit
+        4. return to home prompt
         \n`);
 
         switch(option) {
