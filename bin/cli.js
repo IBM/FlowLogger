@@ -1,6 +1,15 @@
 #!/usr/bin/env node
 
 const readline = require("readline-sync");
+const figlet = require("figlet");
+const chalk = require("chalk");
+
+console.log(
+    chalk.yellow(
+      figlet.textSync('Flowlogger', { horizontalLayout: 'full' })
+    )
+);
+
 let getFlowLog = require('../index.js').main;
 let parse = require('../flow_parse.js').input;
 let getLogErrors = require('../backend/getLogErrors.js');
@@ -20,6 +29,7 @@ switch(process.argv[2]){
             1. (get) newest flowlogs
             2. (Parse) flowlogs stored
             3. (scan) check for errors
+            q. exit
             \n`);
             console.log(option)
             switch (option) {
@@ -32,7 +42,8 @@ switch(process.argv[2]){
                 case "3": case "scan": case "Scan":
                     getLogErrors()
                     break
-                case "4": 
+                case "q": 
+                    console.log("exiting...\n\n\n\n\n");
                     option = -1
                     break;
                 default:
