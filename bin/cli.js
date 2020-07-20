@@ -2,14 +2,14 @@
 
 const readline = require("readline-sync");
 let getFlowLog = require('../index.js').main;
-let parse = require('../flow_parse.js').input;
+let parse_f = require('../flow_parse.js');//.input;
 let getLogErrors = require('../backend/getLogErrors.js');
 switch(process.argv[2]){
     case "get":
         getFlowLog()
         break
     case "parse":
-        parse()
+        parse_f.input
         break
     case "scan":
         getLogErrors()
@@ -27,7 +27,7 @@ switch(process.argv[2]){
                     getFlowLog()
                     break
                 case "2": case "parse": case "Parse":
-                    parse()
+                    parse_f()
                     break
                 case "3": case "scan": case "Scan":
                     getLogErrors()
