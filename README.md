@@ -11,7 +11,16 @@
 
 When traffic is denied to a VPC by ACLs or security groups, the only way to investigate is to look at flow logs. Currently, flow logs are hard to read and manage. We are going to build a tool that runs SQL queries on the logs to generate important information in a readable format.
 
-_Please note that this plug-in is in the **EXPERIMENTAL** phase and there is no official support at the moment, nor are the current command structures going to be around for very long as they are being constantly modified and tweaked for optimal results before pulling them into our CLI._
+_Please note that this CLI is in the **EXPERIMENTAL** phase and there is no official support at the moment, nor are the current command structures going to be around for very long as they are being constantly modified and tweaked for optimal results before pulling them into our CLI._
+
+## Creating a flow log collector 
+Prior to creating a flow log collector, ensure that you have met the following prerequisites:
+- Make sure that at least one VPC, a subnet, and a virtual server instance exist. 
+- Make sure that a COS instance with a bucket exists for your flow logs. 
+
+To create the prerequisites follow the steps on https://cloud.ibm.com/docs/vpc?topic=vpc-ordering-flow-log-collector#fl-before-you-begin
+
+Make sure to know the region of the COS as thats how the app lists out the COS buckets 
 
 ## Flow Logs 
 Capture information about the IP traffic going to and from network interfaces in your VPC and are stored in a Cloud Object Storage(COS) bucket 
@@ -23,14 +32,14 @@ With this information you are able to:
 - Determine the overall health of network monitoring
 - Assist with root cause analysis.
 
+For help making sense of the flowlogs, view https://cloud.ibm.com/docs/vpc?topic=vpc-fl-analyze 
+
 ## Getting started
 
 ### Prerequisites
 
 - Must have node js installed.
-
 - Install node js with `brew install node`.
-
 - Run `npm install readline-sync` in the project directory. This package allows an easy way to obtain user input.
 - Run `npm install axios ibm-cos-sdk qs` in the project directory
 - Run `npm install chalk clear figlet colors` in the project directory
@@ -38,7 +47,7 @@ With this information you are able to:
 ### Commands
 
 - Use `sudo npm install -g .` to package the program as a global command
-- Use `flowlog get` to pull the newest flowlogs
+- Use `flowlog get` to pull the newest flowlogs from COS bucket
 - Use `flowlog parse` to parse the flowlogs
 - Use `flowlog scan` to scan logs for errors
 - Alternatively, use `flowlog` to choose from any of the above
