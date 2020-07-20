@@ -13,15 +13,6 @@ When traffic is denied to a VPC by ACLs or security groups, the only way to inve
 
 _Please note that this CLI is in the **EXPERIMENTAL** phase and there is no official support at the moment, nor are the current command structures going to be around for very long as they are being constantly modified and tweaked for optimal results before pulling them into our CLI._
 
-## Creating a flow log collector 
-Prior to creating a flow log collector, ensure that you have met the following prerequisites:
-- Make sure that at least one VPC, a subnet, and a virtual server instance exist. 
-- Make sure that a COS instance with a bucket exists for your flow logs. 
-
-To create the prerequisites follow the steps on https://cloud.ibm.com/docs/vpc?topic=vpc-ordering-flow-log-collector#fl-before-you-begin
-
-Make sure to know the region of the COS as thats how the app lists out the COS buckets 
-
 ## Flow Logs 
 Capture information about the IP traffic going to and from network interfaces in your VPC and are stored in a Cloud Object Storage(COS) bucket 
 
@@ -36,7 +27,18 @@ For help making sense of the flowlogs, view https://cloud.ibm.com/docs/vpc?topic
 
 ## Getting started
 
-### Prerequisites
+### IBM Cloud Prerequistes 
+
+## Creating a flow log collector 
+Prior to creating a flow log collector, ensure that you have met the following prerequisites:
+- Make sure that at least one VPC, a subnet, and a virtual server instance exist. 
+- Make sure that a COS instance with a bucket exists for your flow logs. 
+
+To complete the prerequisites follow the steps on https://cloud.ibm.com/docs/vpc?topic=vpc-ordering-flow-log-collector#fl-before-you-begin
+
+Make sure to know the region of the COS as thats how the app lists out the COS buckets 
+
+### Terminal Prerequisites
 
 - Must have node js installed.
 - Install node js with `brew install node`.
