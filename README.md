@@ -1,4 +1,4 @@
-# acl-logs
+# Flowlogger
 
 ## Contents
 
@@ -22,18 +22,25 @@ _Please note that this plug-in is in the **EXPERIMENTAL** phase and there is no 
 
 - Run `npm install readline-sync` in the project directory. This package allows an easy way to obtain user input.
 - Run `npm install axios ibm-cos-sdk qs` in the project directory
-- Run `npm install chalk clear figlet` in the project directory
+- Run `npm install chalk clear figlet colors` in the project directory
 
+### Commands
 
 - Use `sudo npm install -g .` to package the program as a global command
 - Use `flowlog get` to pull the newest flowlogs
 - Use `flowlog parse` to parse the flowlogs
+- Use `flowlog scan` to scan logs for errors
+- Alternatively, use `flowlog` to choose from any of the above
 
-## How to get your API Key
+### How to get your API Key
 - Log in to to cloud.ibm.com
 - Click "Manage" in the top right menu bar
 - Select "Access (IAM)"
 - Select "API keys" on the left menu
 - You can create a API key in this page, and make sure to store it securely
 
-## 
+## Resources
+
+- [IBM Virtual Private Cloud](https://cloud.ibm.com/docs/vpc?topic=vpc-getting-started)
+- [IBM Flowlogs (Beta)](https://cloud.ibm.com/docs/vpc?topic=vpc-flow-logs&locale=en)
+- [IBM Cloud Object Storage](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-getting-started-cloud-object-storage)
