@@ -1,5 +1,6 @@
 const readline = require("readline-sync");
 const fs = require("fs");
+const colors = require('colors');
 async function getBucketContents(bucketName, cosClient) {
   console.log(`Retrieving bucket contents from: ${bucketName}`);
   return cosClient
@@ -13,7 +14,7 @@ async function getBucketContents(bucketName, cosClient) {
       }
     })
     .catch((e) => {
-      console.error(`ERROR: ${e.code} - ${e.message}\n`);
+      console.error((`ERROR: ${e.code} - ${e.message}\n`).red);
     });
 }
 async function getItem(bucketName, itemName, cosClient) {

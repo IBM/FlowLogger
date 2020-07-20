@@ -12,11 +12,12 @@ When traffic is denied to a VPC by ACLs or security groups, the only way to inve
 - Run `npm install readline-sync` in the project directory. This package allows an easy way to obtain user input.
 - Run `npm install axios ibm-cos-sdk qs` in the project directory
 - Run `npm install chalk clear figlet` in the project directory
-
+- Run `npm install colors` in the project directory
 
 - Use `sudo npm install -g .` to package the program as a global command
 - Use `flowlog get` to pull the newest flowlogs
 - Use `flowlog parse` to parse the flowlogs
+- Use `flowlog scan` to scan the flowlogs for errors
 
 ## How to get your API Key
 - Log in to to cloud.ibm.com
