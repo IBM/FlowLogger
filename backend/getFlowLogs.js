@@ -2,12 +2,12 @@ const readline = require("readline-sync");
 var access_token = "";
 var refresh_token = "";
 var apikey;
-var axios = require("axios");
-var qs = require("qs");
+const axios = require("axios");
+const qs = require("qs");
 var regionEndpoint = "";
 var bucketName = "";
 
-//getting token to perform api requests
+// getting token to perform api requests
 async function getTokens() {
   await axios({
     method: "post",
@@ -24,14 +24,12 @@ async function getTokens() {
     .then(async (res) => {
       access_token = res.data.access_token;
       refresh_token = res.data.refresh_token;
-
-      //await getCollectors();
     })
     .catch((error) => {
       console.log(error);
     });
 }
-//collecting available flow log collectors for the us-east region
+// collecting available flow log collectors for specified region
 async function getCollectors(apiKey) {
   apikey = apiKey;
   await getTokens();
@@ -87,7 +85,7 @@ async function getRegion() {
 
   return region;
 }
-//styling the json data
+// styling the json data
 async function formatCollectors(collectors) {
   var i = 1;
   console.log("name        bucket");
