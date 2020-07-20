@@ -46,16 +46,16 @@ var flow_log;
 
 //reads in json file
 //TODO: add implementation which filters through each of the json files rather than individual ones
-async function input(){
+function input(){
     const fs = require('fs');
     const { time } = require('console');
-    fs.readFile('./flow-log-1.json', 'utf8', async (err, jsonString) => {
+    fs.readFile('./flow-log-1.json', 'utf8', (err, jsonString) => {
         if (err) {
             console.log("Error reading file from disk:", err);
             return;
         }
         try {
-            flow_log = await JSON.parse(jsonString);
+            flow_log = JSON.parse(jsonString);
             //console.log(flow_log)
             main()
             return;
@@ -105,7 +105,7 @@ function output(file_name){
 }
 
 
-async function main(){
+function main(){
     const readline = require('readline-sync');
 
     do{  
