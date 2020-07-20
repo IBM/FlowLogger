@@ -1,5 +1,7 @@
-
 //Outputs Date and Time in a more readable format
+
+const fs = require('fs');
+const { time } = require('console');
 function date_time(date){
     var arr = date.split("T");
     return "Date: "+arr[0] + " Time: "+arr[1];
@@ -7,6 +9,24 @@ function date_time(date){
 const readline = require('readline-sync');
 
 var input_file
+const logFolder = './logs';
+
+//Function made by Daroush that allows the user to select a certain log by number from the logs folder
+function selectLog(){
+    var count=0;
+    var files={};
+    fs.readdirSync(logFolder).forEach(file => {
+        files[count]=file;
+        console.log(count+". "+file);
+        count++;
+      });
+      var selection = readline.question(`\nselect log\n`);
+      if(selection>=0 && selection<count){
+        
+        return "./logs/"+files[selection];
+      }
+    
+}
 
 //Outputs flow logs that match the filter requirement of an attribute given by the user
 
@@ -50,16 +70,15 @@ var flow_log;
 //reads in json file
 //TODO: add implementation which filters through each of the json files rather than individual ones
 function input(){
-    const fs = require('fs');
-    const { time } = require('console');
-    input_file = readline.question("Input the name of the flow log")
-    input_file = "./log/"+input_file
+
+    input_file = selectLog()
     fs.readFile(input_file, 'utf8', (err, jsonString) => {
         if (err) {
             console.log("Error reading file from disk:", err)
             return
         }
         try {
+
             flow_log = JSON.parse(jsonString)
             //console.log(flow_log)
             main()
@@ -181,4 +200,7 @@ function main(){
 
     }while(option!=-1);
 }
+
 input()
+module.exports.input = input;
+module.exports = filter_by;

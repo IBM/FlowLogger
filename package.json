@@ -6,8 +6,25 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "chalk": "^4.1.0",
+    "clear": "^0.1.0",
+    "clui": "^0.3.6",
+    "figlet": "^1.5.0",
     "ibm-cos-sdk": "^1.6.1",
+    "minimist": "^1.2.5",
     "qs": "^6.9.4",
     "readline-sync": "^1.4.10"
-  }
+  },
+  "bin": {
+    "flowlog": "bin/cli.js"
+  },
+  "name": "acl-logs",
+  "description": "When traffic is denied to a VPC by ACLs or security groups, the only way to investigate is to look at flow logs. Currently, flow logs are hard to read and manage. We are going to build a tool that runs SQL queries on the logs to generate important information in a readable format.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "devDependencies": {}
 }
