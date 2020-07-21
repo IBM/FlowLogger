@@ -1,31 +1,31 @@
 //Outputs Date and Time in a more readable format
-
+const logFolder = './logs';
 const fs = require('fs');
 const { time } = require('console');
+var flow_log;
+const readline = require('readline-sync');
+
+var input_file
+
 function date_time(date){
     var arr = date.split("T");
     return "Date: "+arr[0] + " Time: "+arr[1];
 }
-const readline = require('readline-sync');
 
-var input_file
-const logFolder = './logs';
 
 //Function made by Daroush that allows the user to select a certain log by number from the logs folder
 function selectLog(){
-    var count=0;
+    let count=0;
     var files={};
     fs.readdirSync(logFolder).forEach(file => {
         files[count]=file;
         console.log(count+". "+file);
         count++;
-      });
-      var selection = readline.question(`\nselect log\n`);
-      if(selection>=0 && selection<count){
-        
+    });
+    var selection = readline.question(`\nselect log\n`);
+    if(selection>=0 && selection<count){
         return "./logs/"+files[selection];
-      }
-    
+    }
 }
 
 //Outputs flow logs that match the filter requirement of an attribute given by the user
@@ -47,8 +47,6 @@ function filter_by(flow_log,attributes, filter){
             valid_arr.push(arr[i])
         }
         allowed = true
-        //console.log(arr[i])
-
     }
     for(var i=0;i<valid_arr.length;i++){
         console.log(valid_arr[i])
@@ -65,7 +63,6 @@ function time_elapsed(start_date,end_date){
     return "Time elapsed in seconds: "+(end_time.getTime()-start_time.getTime())/1000
 
 }
-var flow_log;
 
 //reads in json file
 //TODO: add implementation which filters through each of the json files rather than individual ones
@@ -79,14 +76,12 @@ function input(){
         }
         try {
             flow_log = JSON.parse(jsonString);
-            //console.log(flow_log)
             main()
             return;
         }
         catch (err) {
             console.log('Error parsing JSON string:', err);
             return;
-
         }
     })
 }
@@ -105,9 +100,6 @@ function for_mat(flog,tabs){
 }
 
 function output(file_name){
-
-    const fs = require('fs');
-    const { time } = require('console');
     var format_flow = for_mat(flow_log,"")
 
     console.log(flow_log)
@@ -118,18 +110,15 @@ function output(file_name){
         }
         try {
             return
-
     } catch(err) {
-            console.log('Error parsing JSON string:', err)
-            return
-
+        console.log('Error parsing JSON string:', err)
+        return
         }
     })
 }
 
 
 function main(){
-
     do{  
 
         var option;
@@ -187,8 +176,6 @@ function main(){
                         filters.push(filter)
                     }
                     filter_by(flow_log, attributes,filters);
-
-                
                 break;
 
             case "3":
@@ -206,7 +193,6 @@ function main(){
 
             default:
                 console.log("invalid option\n\n\n\n\n");
-
         }
 
     }while(option!=-1);
