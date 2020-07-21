@@ -5,7 +5,6 @@ const { time } = require('console');
 var flow_log;
 const readline = require('readline-sync');
 
-var input_file
 
 function date_time(date){
     var arr = date.split("T");
@@ -34,8 +33,8 @@ function selectLog(){
 
 function filter_by(flow_log,attributes, filter){
     var allowed = true
-    const arr = flow_log.flow_logs
-    const valid_arr = [];
+    var arr = flow_log.flow_logs
+    var valid_arr = [];
 
     for(var i=0;i<arr.length;i++){
         for(var j=0;j<attributes.length;j++){
@@ -66,10 +65,10 @@ function time_elapsed(start_date,end_date){
 
 //reads in json file
 //TODO: add implementation which filters through each of the json files rather than individual ones
-function input(){
 
-    input_file = selectLog()
-    fs.readFile(input_file, 'utf8', (err, jsonString) => {
+
+function input(){
+    fs.readFile(selectLog(), 'utf8', (err, jsonString) => {
         if (err) {
             console.log("Error reading file from disk:", err);
             return;
@@ -137,7 +136,7 @@ function main(){
                 console.log(flow_log)
                 break;
             case "2":
-                const keys = []
+                var keys = []
                 console.log("Attributes to filter by: \n\n");
                 var count = 0;
                 for(var k in flow_log.flow_logs[0]){
@@ -145,8 +144,8 @@ function main(){
                     console.log(count+". "+k)
                     keys.push(k)
                 }
-                const attributes = [];
-                const filters = [];
+                var attributes = [];
+                var filters = [];
                 var amt = readline.question("How many attributes do you want to filter by? Press q to quit")
                 if(amt=='q'){
                     break;
@@ -159,7 +158,7 @@ function main(){
                         if(attribute.length<=2){
                             attribute = keys[attribute-1]
                         }
-                        const list_val = []
+                        var list_val = []
                         attributes.push(attribute)
                         for(var j=0;j<flow_log.flow_logs.length;j++){
                             list_val.push(flow_log.flow_logs[j][attribute])

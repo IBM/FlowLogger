@@ -7,6 +7,7 @@ const process = require("process");
 const readline = require('readline-sync');
 const { time } = require('console');
 var file_dir = "./logs"; //directory of the folder where json files are
+const logFolder = './logs';
 
 
 //Asks the user what attributes they want to filter the json files by
@@ -96,8 +97,8 @@ function input(stat,attributes,filter){
 //returns true if the flow_log passed in has a flow log that contains attributes that match what the user is looking for
 function filter_by(flow_log,attributes, filter){
     var allowed = true
-    const arr = flow_log.flow_logs
-    const valid_arr = [];
+    var arr = flow_log.flow_logs
+    var valid_arr = [];
 
     for(var i=0;i<arr.length;i++){
         for(var j=0;j<attributes.length;j++){
@@ -117,7 +118,6 @@ function filter_by(flow_log,attributes, filter){
     return false
 }
 
-const logFolder = './logs';
 
 function selectLog(){
     var count=0;
