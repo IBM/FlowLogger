@@ -1,6 +1,6 @@
 # FlowLogger
 
-A VPC Flow Logs support plugin created by the interns of the GCAT team.
+A command line tool for retrieving and parsing IBM Cloud flow logs.
 
 ## Contents
 
