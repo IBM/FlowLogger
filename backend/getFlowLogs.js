@@ -38,7 +38,8 @@ async function getCollectors(apiKey) {
   if(problem)
     return null
   var region = await getRegion()
-  if(region="q")
+  console.log(region)
+  if(region=="q")
     return "q"
   await axios({
     method: "get",
