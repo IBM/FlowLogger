@@ -51,18 +51,18 @@ function input(){
     const { time } = require('console');
     fs.readFile('./flow-log-1.json', 'utf8', (err, jsonString) => {
         if (err) {
-            console.log("Error reading file from disk:", err)
-            return
+            console.log("Error reading file from disk:", err);
+            return;
         }
         try {
-            flow_log = JSON.parse(jsonString)
+            flow_log = JSON.parse(jsonString);
             //console.log(flow_log)
             main()
-            return
-
-    } catch(err) {
-            console.log('Error parsing JSON string:', err)
-            return
+            return;
+        }
+        catch (err) {
+            console.log('Error parsing JSON string:', err);
+            return;
 
         }
     })
@@ -115,7 +115,7 @@ function main(){
         1. print flowlogs
         2. filter flow logs by attributes
         3. save to a file
-        4. exit
+        4. return to home prompt
         \n`);
 
         switch(option) {
@@ -177,4 +177,4 @@ function main(){
     }while(option!=-1);
 }
 module.exports.input = input;
-module.exports = filter_by;
+module.exports.filter_by = filter_by;
