@@ -74,19 +74,18 @@ function input(){
     input_file = selectLog()
     fs.readFile(input_file, 'utf8', (err, jsonString) => {
         if (err) {
-            console.log("Error reading file from disk:", err)
-            return
+            console.log("Error reading file from disk:", err);
+            return;
         }
         try {
-
-            flow_log = JSON.parse(jsonString)
+            flow_log = JSON.parse(jsonString);
             //console.log(flow_log)
             main()
-            return
-
-    } catch(err) {
-            console.log('Error parsing JSON string:', err)
-            return
+            return;
+        }
+        catch (err) {
+            console.log('Error parsing JSON string:', err);
+            return;
 
         }
     })
@@ -160,9 +159,14 @@ function main(){
                 const attributes = [];
                 const filters = [];
                 var amt = readline.question("How many attributes do you want to filter by? Press q to quit")
-                if(amt!='q'){
+                if(amt=='q'){
+                    break;
+                }
                     for(var i=0;i<amt;i++){
                         var attribute = readline.question(i+1+". Choose an attribute to filter by: ")
+                        if(attribute=='q'){
+                            break;
+                        }
                         if(attribute.length<=2){
                             attribute = keys[attribute-1]
                         }
@@ -176,6 +180,7 @@ function main(){
                             console.log(String.fromCharCode(97 + j)+". "+unique[j])
                         }
                         var filter = readline.question(i+1+". Choose the value of that attribute you want to filter by: ")
+
                         if(filter>='a'&&filter<='z'){
                             filter = unique[filter.charCodeAt(0) - 97]
                         }
@@ -183,11 +188,14 @@ function main(){
                     }
                     filter_by(flow_log, attributes,filters);
 
-                }
+                
                 break;
 
             case "3":
                 var file_name = readline.question("Type in the file you want to save to: ")
+                if(file_name=='q'){
+                    break
+                }
                 output(file_name)
                 break;
                 
@@ -203,9 +211,5 @@ function main(){
 
     }while(option!=-1);
 }
-
-input()
-//module.exports.input = input;
-//module.exports = filter_by;
-
-module.exports = input;
+module.exports.input = input;
+module.exports.filter_by = filter_by;
