@@ -6,7 +6,7 @@ const axios = require("axios");
 const qs = require("qs");
 var regionEndpoint = "";
 var bucketName = "";
-var problem=false;
+var problem = false;
 
 // getting token to perform api requests
 async function getTokens() {
@@ -28,19 +28,17 @@ async function getTokens() {
     })
     .catch((error) => {
       console.log(error);
-      problem=true;
+      problem = true;
     });
 }
 // collecting available flow log collectors for specified region
 async function getCollectors(apiKey) {
   apikey = apiKey;
-  await getTokens()
-  if(problem)
-    return null
-  var region = await getRegion()
-  console.log(region)
-  if(region=="q")
-    return "q"
+  await getTokens();
+  if (problem) return null;
+  var region = await getRegion();
+  console.log(region);
+  if (region == "q") return "q";
   await axios({
     method: "get",
     headers: { Authorization: "Bearer " + access_token },
@@ -54,10 +52,9 @@ async function getCollectors(apiKey) {
     })
     .catch((error) => {
       console.log(error);
-      problem=true;
+      problem = true;
     });
-  if(problem)
-    return null
+  if (problem) return null;
   return [bucketName, regionEndpoint];
 }
 //getting region
