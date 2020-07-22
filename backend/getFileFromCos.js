@@ -1,20 +1,20 @@
 const readline = require("readline-sync");
 const fs = require("fs");
-const colors = require('colors');
+const colors = require("colors");
 async function getBucketContents(bucketName, cosClient) {
   console.log(`Retrieving bucket contents from: ${bucketName}`);
   return cosClient
     .listObjects({ Bucket: bucketName })
     .promise()
-    .then(async (data) => {
+    .then(async data => {
       if (data != null && data.Contents != null) {
         for (var i = 0; i < data.Contents.length; i++) {
           await getItem(bucketName, data.Contents[i].Key, cosClient);
         }
       }
     })
-    .catch((e) => {
-      console.error((`ERROR: ${e.code} - ${e.message}\n`).red);
+    .catch(e => {
+      console.error(`ERROR: ${e.code} - ${e.message}\n`.red);
     });
 }
 async function getItem(bucketName, itemName, cosClient) {
@@ -22,10 +22,10 @@ async function getItem(bucketName, itemName, cosClient) {
   return cosClient
     .getObject({
       Bucket: bucketName,
-      Key: itemName,
+      Key: itemName
     })
     .promise()
-    .then((data) => {
+    .then(data => {
       if (data != null) {
         try {
           fs.writeFileSync(
@@ -38,7 +38,7 @@ async function getItem(bucketName, itemName, cosClient) {
         }
       }
     })
-    .catch((e) => {
+    .catch(e => {
       console.error(`ERROR: ${e.code} - ${e.message}\n`);
     });
 }
