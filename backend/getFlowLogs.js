@@ -100,7 +100,7 @@ async function getRegion() {
 // styling the json data
 async function formatCollectors(collectors) {
   var i = 1;
-  console.log("name        bucket");
+  if(collectors.length>0) console.log("name        bucket");
   for (var item in collectors) {
     console.log(
       i +
@@ -113,10 +113,10 @@ async function formatCollectors(collectors) {
     i++;
   }
   if (collectors.length == 1) bucketName = collectors[0].storage_bucket.name;
-  else {
+  else if(collectors.length>0){
     var option = 1;
     do {
-      if (option < 1 || option > collectors.length)
+      if (isNaN(option)|| option== "" || option < 1 || option > collectors.length)
         console.log("Invalid option.\n");
       option = readline.question(
         `
@@ -125,8 +125,11 @@ async function formatCollectors(collectors) {
           `:
                 \n`
       );
-    } while (option < 1 || option > collectors.length);
+    } while (isNaN(option)|| option== "" || option < 1 || option > collectors.length);
     bucketName = collectors[option - 1].storage_bucket.name;
+  }else{
+    console.log(("No Flow Log Collectors Found").yellow);
+    problem=true;
   }
 }
 

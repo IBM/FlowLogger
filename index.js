@@ -40,7 +40,7 @@ const main = async function () {
           await getCOS.getBucketContents(bucketName, cosClient);
         }else{
           config.apiKeyId=""
-          console.log("Error, returning to home prompt...")
+          console.log(("Error, returning to home prompt...").red)
           return
         }
         break;
