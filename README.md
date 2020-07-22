@@ -1,6 +1,6 @@
 # FlowLogger
 
-A VPC Flow Logs support CLI created by the interns of the GCAT team.
+A command line tool for retrieving and parsing IBM Cloud flow logs.
 
 ## Contents
 
@@ -49,7 +49,7 @@ Prior to creating a flow log collector, ensure that you have met the following p
 - Run `npm install readline-sync` in the project directory. This package allows an easy way to obtain user input.
 - Run `npm install axios ibm-cos-sdk qs` in the project directory
 - Run `npm install chalk clear figlet colors` in the project directory
-- Use `sudo npm install -g .` to package the program as a global command "flowlog"
+- Run `sudo npm install -g .` to package the program as a global command
 
 #### Commands
 
