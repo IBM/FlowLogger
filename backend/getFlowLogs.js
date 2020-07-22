@@ -58,7 +58,7 @@ async function getCollectors(apiKey) {
   return [bucketName, regionEndpoint];
 }
 //getting region
-async function getRegion() {
+function getRegion() {
   do {
     var loop = false;
     var region = readline.question(`
