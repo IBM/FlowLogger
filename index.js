@@ -7,10 +7,8 @@ const config = {
 const getCollectors = require("./backend/getFlowLogs");
 const getCOS = require("./backend/getFileFromCos");
 
-
-
 const main = async function () {
-  while(true){
+  while (true) {
     var option;
     option = readline.question(`choose option
         1. get flowlogs
@@ -23,33 +21,32 @@ const main = async function () {
           config.apiKeyId = readline.question(`Please enter your API Key:
                         \n`);
         }
-        if(config.apiKeyId=='q'){
-          config.apiKeyId=""
-          console.log("returning...\n\n\n\n\n")
-          return
+        if (config.apiKeyId == "q") {
+          config.apiKeyId = "";
+          console.log("returning...\n\n\n\n\n");
+          return;
         }
         // Get bucketName and region endpoint
         const collectors = await getCollectors(config.apiKeyId);
-        if(collectors=="q")
-          return
-        if(collectors!=null){
+        if (collectors == "q") return;
+        if (collectors != null) {
           const bucketName = collectors[0];
           config.endpoint = collectors[1];
           var cosClient = new myCOS.S3(config);
           // Retrieve all items from the COS bucket
           await getCOS.getBucketContents(bucketName, cosClient);
-        }else{
-          config.apiKeyId=""
-          console.log("Error, returning to home prompt...")
-          return
+        } else {
+          config.apiKeyId = "";
+          console.log("Error, returning to home prompt...");
+          return;
         }
         break;
 
-    case "q":
+      case "q":
         console.log("returning...\n\n\n\n\n");
         return;
 
-    default:
+      default:
         console.log("invalid option\n\n\n\n\n");
     }
   }
