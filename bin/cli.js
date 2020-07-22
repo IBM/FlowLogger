@@ -8,9 +8,9 @@ console.log(
   chalk.yellow(figlet.textSync("Flowlogger", { horizontalLayout: "full" }))
 );
 
-let getFlowLog = require("../index.js").main;
-let parse = require("../flow_parse.js").input;
-let getLogErrors = require("../backend/getLogErrors.js");
+const getFlowLog = require("../index.js").main;
+const parse = require("../flow_parse.js").input;
+const getLogErrors = require("../backend/getLogErrors.js");
 function printHelp() {
   let overview = "OVERVIEW: \n\t";
   let overview_description =
