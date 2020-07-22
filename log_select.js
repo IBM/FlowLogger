@@ -33,6 +33,12 @@ function get_attributes(){
             return
         }
         if(attribute.length<=2){
+            while(attribute>=22||attribute<=0){
+                attribute = readline.question("Invalid number choice, choose a new number or q to quit")
+                if(attribute==='q'){
+                    break
+                }
+            }
             attribute = keys[attribute-1]
         }
         attributes.push(attribute)

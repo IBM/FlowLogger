@@ -22,6 +22,15 @@ function selectLog(){
         count++;
     });
     var selection = readline.question(`\nselect log\n`);
+    if(selection=='q'){
+        return
+    }
+    while(selection<0||selection>=count){
+        selection = readline.question("Not a valid log, enter again")
+        if(selection=='q'){
+            return
+        }
+    }
     if(selection>=0 && selection<count){
         return "./logs/"+files[selection];
     }
@@ -136,6 +145,7 @@ function main(){
                 console.log(flow_log)
                 break;
             case "2":
+                var breakout = false
                 var keys = []
                 console.log("Attributes to filter by: \n\n");
                 var count = 0;
@@ -151,14 +161,30 @@ function main(){
                     break;
                 }
                     for(var i=0;i<amt;i++){
-                        var attribute = readline.question(i+1+". Choose an attribute to filter by: ")
+                        var attribute = readline.question(i+1+". Choose an attribute to filter by (type out the name or choose a number): ")
                         if(attribute=='q'){
                             break;
                         }
                         if(attribute.length<=2){
+                            while(attribute>=22||attribute<=0){
+                                attribute = readline.question("Invalid number choice, choose a new number or q to quit")
+                                if(attribute==='q'){
+                                    break
+                                }
+                            }
                             attribute = keys[attribute-1]
                         }
+                        while(!keys.includes(attribute)){
+                            attribute = readline.question("Please retype the attribute you want to filter by or press q to quit")
+                            if(attribute==='q'){
+                                break
+                            }
+                        }
+                        if(attribute==='q'){
+                            break
+                        }
                         var list_val = []
+                        
                         attributes.push(attribute)
                         for(var j=0;j<flow_log.flow_logs.length;j++){
                             list_val.push(flow_log.flow_logs[j][attribute])
@@ -169,10 +195,26 @@ function main(){
                         }
                         var filter = readline.question(i+1+". Choose the value of that attribute you want to filter by: ")
 
-                        if(filter>='a'&&filter<='z'){
+                        if(filter>='a'&&filter<=String.fromCharCode(97 + j)){
                             filter = unique[filter.charCodeAt(0) - 97]
                         }
+                        while(!unique.includes(filter)){
+                            filter = readline.question("Please retype the filter or press q to quit")
+                            if(filter==='q'){
+                                breakout = true
+                                break
+                            }
+
+                        }
+                        if(filter==='q'){
+                            breakout = true
+                            break;
+                        }
+
                         filters.push(filter)
+                    }
+                    if(breakout){
+                        break;
                     }
                     filter_by(flow_log, attributes,filters);
                 break;
