@@ -14,10 +14,20 @@ function selectLog() {
   });
   do {
     selection = readline.question(`\nselect log\n`);
-    if (isNaN(selection) || selection == "" || parseInt(selection) <= 0 || parseInt(selection) >= count) {
+    if (
+      isNaN(selection) ||
+      selection == "" ||
+      parseInt(selection) <= 0 ||
+      parseInt(selection) >= count
+    ) {
       console.log("invalid option");
     }
-  } while ( isNaN(selection) || selection == "" || parseInt(selection) <= 0 || parseInt(selection) >= count);
+  } while (
+    isNaN(selection) ||
+    selection == "" ||
+    parseInt(selection) <= 0 ||
+    parseInt(selection) >= count
+  );
   return require("../logs/" + files[selection]);
 }
 module.exports = selectLog;
