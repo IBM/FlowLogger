@@ -1,5 +1,5 @@
 const colors = require("colors");
-const filter_by = require("../flow_parse.js");
+const filter_by = require("../flow_parse.js").filter_by;
 const selectLog = require("../functions/selectLog.js");
 function getLogErrors() {
   var file = selectLog();

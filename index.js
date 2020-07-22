@@ -2,12 +2,12 @@ const readline = require("readline-sync");
 const myCOS = require("ibm-cos-sdk");
 const config = {
   endpoint: "",
-  apiKeyId: "",
+  apiKeyId: ""
 };
 const getCollectors = require("./backend/getFlowLogs");
 const getCOS = require("./backend/getFileFromCos");
 
-const main = async function () {
+const main = async function() {
   while (true) {
     var option;
     option = readline.question(`choose option
@@ -37,7 +37,7 @@ const main = async function () {
           await getCOS.getBucketContents(bucketName, cosClient);
         } else {
           config.apiKeyId = "";
-          console.log("Error, returning to home prompt...");
+          console.log("Error, returning to home prompt...".red);
           return;
         }
         break;

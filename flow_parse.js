@@ -14,7 +14,7 @@ function date_time(date) {
 function selectLog() {
   let count = 0;
   var files = {};
-  fs.readdirSync(logFolder).forEach((file) => {
+  fs.readdirSync(logFolder).forEach(file => {
     files[count] = file;
     console.log(count + ". " + file);
     count++;
@@ -97,7 +97,7 @@ function output(file_name) {
   var format_flow = for_mat(flow_log, "");
 
   console.log(flow_log);
-  fs.writeFile(file_name, format_flow, (err) => {
+  fs.writeFile(file_name, format_flow, err => {
     if (err) {
       console.log("Error reading file from disk:", err);
       return;

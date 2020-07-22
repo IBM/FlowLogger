@@ -14,19 +14,19 @@ async function getTokens() {
     method: "post",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      Accept: "application/json",
+      Accept: "application/json"
     },
     url: "https://iam.cloud.ibm.com/identity/token",
     data: qs.stringify({
       grant_type: "urn:ibm:params:oauth:grant-type:apikey",
-      apikey: apikey,
-    }),
+      apikey: apikey
+    })
   })
-    .then(async (res) => {
+    .then(async res => {
       access_token = res.data.access_token;
       refresh_token = res.data.refresh_token;
     })
-    .catch((error) => {
+    .catch(error => {
       console.log(error);
       problem = true;
     });
@@ -45,12 +45,12 @@ async function getCollectors(apiKey) {
     url:
       "https://" +
       region +
-      ".iaas.cloud.ibm.com/v1/flow_log_collectors?version=2020-06-30&generation=2",
+      ".iaas.cloud.ibm.com/v1/flow_log_collectors?version=2020-06-30&generation=2"
   })
-    .then(async (res) => {
+    .then(async res => {
       await formatCollectors(res.data.flow_log_collectors);
     })
-    .catch((error) => {
+    .catch(error => {
       console.log(error);
       problem = true;
     });
@@ -58,7 +58,7 @@ async function getCollectors(apiKey) {
   return [bucketName, regionEndpoint];
 }
 //getting region
-async function getRegion() {
+function getRegion() {
   do {
     var loop = false;
     var region = readline.question(`
@@ -97,7 +97,7 @@ async function getRegion() {
 // styling the json data
 async function formatCollectors(collectors) {
   var i = 1;
-  console.log("name        bucket");
+  if (collectors.length > 0) console.log("name        bucket");
   for (var item in collectors) {
     console.log(
       i +
@@ -110,10 +110,15 @@ async function formatCollectors(collectors) {
     i++;
   }
   if (collectors.length == 1) bucketName = collectors[0].storage_bucket.name;
-  else {
+  else if (collectors.length > 0) {
     var option = 1;
     do {
-      if (option < 1 || option > collectors.length)
+      if (
+        isNaN(option) ||
+        option == "" ||
+        option < 1 ||
+        option > collectors.length
+      )
         console.log("Invalid option.\n");
       option = readline.question(
         `
@@ -122,8 +127,16 @@ async function formatCollectors(collectors) {
           `:
                 \n`
       );
-    } while (option < 1 || option > collectors.length);
+    } while (
+      isNaN(option) ||
+      option == "" ||
+      option < 1 ||
+      option > collectors.length
+    );
     bucketName = collectors[option - 1].storage_bucket.name;
+  } else {
+    console.log("No Flow Log Collectors Found".yellow);
+    problem = true;
   }
 }
 
