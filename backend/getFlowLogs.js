@@ -1,4 +1,5 @@
 const readline = require("readline-sync");
+const colors = require("colors");
 var access_token = "";
 var refresh_token = "";
 var apikey;
@@ -7,9 +8,11 @@ const qs = require("qs");
 var regionEndpoint = "";
 var bucketName = "";
 var problem = false;
+var statusCode = "0";
 
 // getting token to perform api requests
-async function getTokens() {
+async function getTokens(apikey) {
+  //console.log("case1");
   await axios({
     method: "post",
     headers: {
@@ -23,18 +26,26 @@ async function getTokens() {
     })
   })
     .then(async res => {
+      // console.log("case2");
       access_token = res.data.access_token;
       refresh_token = res.data.refresh_token;
+      statusCode = res.status;
+
+      //console.log(statusCode);
     })
     .catch(error => {
+      //console.log("case error");
       console.log(error);
       problem = true;
     });
+
+  //console.log("case4");
+  return statusCode;
 }
 // collecting available flow log collectors for specified region
 async function getCollectors(apiKey) {
   apikey = apiKey;
-  await getTokens();
+  await getTokens(apiKey);
   if (problem) return null;
   var region = await getRegion();
   console.log(region);
@@ -141,3 +152,5 @@ async function formatCollectors(collectors) {
 }
 
 module.exports = getCollectors;
+module.exports.getRegion = getRegion;
+module.exports.getTokens = getTokens;
