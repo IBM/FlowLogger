@@ -1,4 +1,6 @@
-# Flowlogger
+# FlowLogger
+
+A command line tool for retrieving and parsing IBM Cloud flow logs.
 
 ## Contents
 
@@ -27,7 +29,24 @@ For help making sense of the flowlogs, view https://cloud.ibm.com/docs/vpc?topic
 
 ## Getting started
 
+<<<<<<< HEAD
 ### IBM Cloud Prerequistes 
+=======
+### IBM Cloud Prerequisites
+
+#### Creating a flow log collector 
+
+Prior to creating a flow log collector, ensure that you have met the following prerequisites:
+
+-Make sure that at least one VPC, a subnet, and a virtual server instance exist. 
+-Make sure that a COS instance with a bucket exists for your flow logs. 
+
+    For more details, see our [Resources](#resources) section for a detailed IBM Cloud documentation on IBM Cloud VPCs and Flow Logs.
+    
+    Make sure to note the region of the COS that contains your flow logs, considering that is what you are prompted for when the CLI pulls them to your local depository.
+
+#### Terminl Prerequisites
+>>>>>>> 698b5c9dee4c7edf8477072d445a095ab33c5ab4
 
 ## Creating a flow log collector 
 Prior to creating a flow log collector, ensure that you have met the following prerequisites:
@@ -45,16 +64,21 @@ Make sure to know the region of the COS as thats how the app lists out the COS b
 - Run `npm install readline-sync` in the project directory. This package allows an easy way to obtain user input.
 - Run `npm install axios ibm-cos-sdk qs` in the project directory
 - Run `npm install chalk clear figlet colors` in the project directory
+- Run `sudo npm install -g .` to package the program as a global command
 
-### Commands
+#### Commands
 
+<<<<<<< HEAD
 - Use `sudo npm install -g .` to package the program as a global command
 - Use `flowlog get` to pull the newest flowlogs from COS bucket
+=======
+- Use `flowlog get` to pull the newest flowlogs
+>>>>>>> 698b5c9dee4c7edf8477072d445a095ab33c5ab4
 - Use `flowlog parse` to parse the flowlogs
 - Use `flowlog scan` to scan logs for errors
 - Alternatively, use `flowlog` to choose from any of the above
 
-### How to get your API Key
+#### How to get your API Key
 - Log in to to cloud.ibm.com
 - Click "Manage" in the top right menu bar
 - Select "Access (IAM)"
