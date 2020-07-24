@@ -142,12 +142,105 @@ function selectLog(){
     }
 }
 
+
+//returns true if the end time of a log is between the given start and end date and false otherwise
+function time_elapsed(log,start_date,end_date){
+
+    var compare = new Date(log['capture_end_time'])
+    if(compare.getTime()>=start_date.getTime()&&compare.getTime()<=end_date.getTime()){
+        return true;
+    }
+    return false;
+}
+
+//the user inputs a time interval and the function returns which flow logs in the log folder fit the specific time frame
+function time_filter(){
+    var option = readline.question(`choose option
+    1. Select a start and end time
+    2. Choose how many minutes you want to go back
+    3. exit
+    \n`);
+    var time_zone=0;
+    var start_time;
+    var end_time;
+    if(option==='1'){
+        time_zone = readline.question("Input the time shift you want from GMT i.e. -5 for EST")
+        start_time = readline.question("Choose the start date of the flow logs in YYYY-MM-DD format: ")
+        start_time = start_time+"T" + readline.question("Choose the start time of the flow log in HH:MM:SS format: ")+"Z"
+        end_time = readline.question("Choose the end date of the flow logs in YYYY-MM-DD format, type now if you want to use the current time: ")
+        end_time = start_time+"T" + readline.question("Choose the end time of the flow log in HH:MM:SS format, type now if you want to use the current time: ")+"Z"
+        start_time = new Date(start_time)
+        start_time.setHours(start_time.getHours()-time_zone)
+        if(end_time.includes("now")){
+            end_time = new Date()
+        }else{
+        var end_time = new Date(end_time)
+        end_itme.setHours(end_time.getHours()-time_zone)
+
+        }
+        console.log(start_time)
+    }
+    if(option==='2'){
+        var minutes = readline.question("How many minutes do you wanna go back?")
+        start_time = new Date()
+        console.log(minutes)
+        start_time.setMinutes(start_time.getMinutes()-minutes)
+        console.log(start_time)
+        end_time = new Date()
+    }
+
+    if(option==='3'||option==='q'){
+        return;
+    }
+
+    //Iterates through the log folder and prints the filename of all the flow logs that are in the selected time frame
+    fs.readdir(file_dir, function (err, files) {
+        if (err) {
+            console.error("Could not list the directory.", err);
+            process.exit(1);
+        }
+
+        files.forEach(function (file, index) {
+            var fromPath = path.join(file_dir, file);
+            fs.stat(fromPath, function (error, stat) {
+                if (error) {
+                    console.error("Error stating file.", error);
+                    return;
+                }
+
+                if (stat.isFile()){
+                    fs.readFile(file_dir+"/"+file, 'utf8', (err, jsonString) => {
+                        if (err) {
+                            console.log("Error reading file from disk:", err)
+                            return
+                        }
+                        try {
+                            if(file.includes("DS_Store")===false){
+                                flow_log = JSON.parse(jsonString)
+                                
+                                if(time_elapsed(flow_log,start_time,end_time)){
+                                    console.log("The file "+file+" is in the time range")
+                                }
+                        }
+                
+                    } catch(err) {
+                        console.log('Error parsing JSON string:', err)
+                        return
+                        }
+                    })
+                }
+            });
+        });
+    });
+}
+
 function main(){
     var option;
     option = readline.question(`choose option
     1. select logs
     2. filter files by attributes
-    3. exit
+    3. filter by time
+    4. exit
     \n`);
     switch(option){
         case "1":
@@ -156,7 +249,15 @@ function main(){
         case "2":
             get_attributes()
             break
+        case "3":
+            time_filter()
+            break
+        case "4":
+            option = -1
+            break;
     }
 }
 
 module.exports.main = main;
+module.exports = filter_by;
+main()
