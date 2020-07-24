@@ -16,6 +16,8 @@
     "qs": "^6.9.4",
     "readline-sync": "^1.4.10"
   },
+  
+   
   "bin": {
     "flowlog": "bin/cli.js"
   },
@@ -24,8 +26,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "",
   "devDependencies": {}
 }
+
+
