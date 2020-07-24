@@ -88,15 +88,14 @@ async function getRegion() {
 // styling the json data
 async function formatCollectors(collectors) {
   var i = 1;
-  console.log("name        bucket");
+  console.log("bucket\t\t\tname");
   for (var item in collectors) {
     console.log(
       i +
         ". " +
-        collectors[item].name +
+        collectors[item].storage_bucket.name +
         "  " +
-        collectors[item].storage_bucket
-          .name /*+"  "+collectors[item].target.name+" "+collectors[item].target.resource_type*/
+        collectors[item].name /*+"  "+collectors[item].target.name+" "+collectors[item].target.resource_type*/
     );
     i++;
   }
