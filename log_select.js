@@ -51,54 +51,26 @@ function get_attributes(){
     readfiles(attributes,filters)
 }
 
-//iterates through every file in the folder
-function readfiles(attributes,filters){
-    fs.readdir(file_dir, function (err, files) {
-        if (err) {
-            console.error("Could not list the directory.", err);
-            process.exit(1);
-        }
-        files.forEach(function (file, index) {
-            var fromPath = path.join(file_dir, file);
-            fs.stat(fromPath, function (error, stat) {
-                if (error) {
-                    console.error("Error stating file.", error);
-                    return;
-                }
 
-                if (stat.isFile()){
-                    input(file,attributes,filters)
+//Reads through each file in the specified directory and converts it into a JSON file
+function readfiles(attributes,filters){
+    let files = fs.readdirSync(file_dir)
+    files.forEach(function(file){
+        var fromPath = path.join(file_dir,file)
+        stat_file = fs.statSync(fromPath)
+        if(stat_file.isFile()){
+            var log_file = fs.readFileSync(fromPath)
+            if(file.includes("DS_Store")===false){
+                var flow_log = JSON.parse(log_file)
+                
+                if(filter_by(flow_log,attributes,filters)){
+                    console.log("The file "+file+" fits the attributes")
                 }
-            });
-        });
+            }
+        }
     });
 }
 
-//reads the files (path provided readfiles) and then converts them into JSON object
-function input(stat,attributes,filter){
-    var og = stat
-    stat = file_dir+"/"+stat
-
-    fs.readFile(stat, 'utf8', (err, jsonString) => {
-        if (err) {
-            console.log("Error reading file from disk:", err)
-            return
-        }
-        try {
-            if(og.includes("DS_Store")===false){
-                flow_log = JSON.parse(jsonString)
-
-                if(filter_by(flow_log,attributes,filter)){
-                    console.log("The file "+stat+" fits the criteria")
-                }
-        }
-
-    } catch(err) {
-        console.log('Error parsing JSON string:', err)
-        return
-        }
-    })
-}
 
 //returns true if the flow_log passed in has a flow log that contains attributes that match what the user is looking for
 function filter_by(flow_log,attributes, filter){
@@ -145,7 +117,6 @@ function selectLog(){
 
 //returns true if the end time of a log is between the given start and end date and false otherwise
 function time_elapsed(log,start_date,end_date){
-
     var compare = new Date(log['capture_end_time'])
     if(compare.getTime()>=start_date.getTime()&&compare.getTime()<=end_date.getTime()){
         return true;
@@ -192,46 +163,24 @@ function time_filter(){
     if(option==='3'||option==='q'){
         return;
     }
+    let files = fs.readdirSync(file_dir)
+    //console.log(files)
 
-    //Iterates through the log folder and prints the filename of all the flow logs that are in the selected time frame
-    fs.readdir(file_dir, function (err, files) {
-        if (err) {
-            console.error("Could not list the directory.", err);
-            process.exit(1);
-        }
-
-        files.forEach(function (file, index) {
-            var fromPath = path.join(file_dir, file);
-            fs.stat(fromPath, function (error, stat) {
-                if (error) {
-                    console.error("Error stating file.", error);
-                    return;
-                }
-
-                if (stat.isFile()){
-                    fs.readFile(file_dir+"/"+file, 'utf8', (err, jsonString) => {
-                        if (err) {
-                            console.log("Error reading file from disk:", err)
-                            return
-                        }
-                        try {
-                            if(file.includes("DS_Store")===false){
-                                flow_log = JSON.parse(jsonString)
-                                
-                                if(time_elapsed(flow_log,start_time,end_time)){
-                                    console.log("The file "+file+" is in the time range")
-                                }
-                        }
+    files.forEach(function(file){
+        var fromPath = path.join(file_dir,file)
+        stat_file = fs.statSync(fromPath)
+        if(stat_file.isFile()){
+            var log_file = fs.readFileSync(fromPath)
+            if(file.includes("DS_Store")===false){
+                var flow_log = JSON.parse(log_file)
                 
-                    } catch(err) {
-                        console.log('Error parsing JSON string:', err)
-                        return
-                        }
-                    })
+                if(time_elapsed(flow_log,start_time,end_time)){
+                    console.log("The file "+file+" is in the time range")
                 }
-            });
-        });
+            }
+        }
     });
+   
 }
 
 function main(){
