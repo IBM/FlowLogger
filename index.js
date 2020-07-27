@@ -1,4 +1,5 @@
 const readline = require("readline-sync");
+const fs = require('fs');
 const myCOS = require("ibm-cos-sdk");
 const config = {
   endpoint: "",
@@ -17,24 +18,34 @@ const main = async function () {
         q. exit
         \n`);
 
+
         
      
 
     switch (option) {
       case "1":
-        var fs = require('fs');
-        var key = fs.readFileSync('apikey.txt', 'utf8');
-        console.log(key.length);
-        if(key.length == 0){
-          config.apiKeyId = readline.question(`Please enter your API Key: \n`);
-          fs.writeFileSync('apikey.txt', config.apiKeyId)
-        } 
-        else
-        {
-          config.apiKeyId = key;
-        }
-
         
+      const apiPath = 'apikey.txt';
+        try {
+          if (fs.existsSync(apiPath)) {
+            //file exists
+            var key = fs.readFileSync(apiPath, 'utf8');
+            console.log(key.length);
+            config.apiKeyId = key;
+          }
+          else{
+            //file doesn't exist
+            config.apiKeyId = readline.question(`Please enter your API Key: \n`);
+            fs.writeFileSync(apiPath, config.apiKeyId) //will write file if it doesn't exist
+          }
+        } catch(err) {
+          console.error(err)
+        } 
+       
+      
+        
+       
+       
         // Get bucketName and region endpoint
         
         const collectors = await getCollectors(config.apiKeyId);
