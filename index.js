@@ -18,14 +18,44 @@ const main = async function () {
         q. exit
         \n`);
 
-
-        
-     
-
     switch (option) {
       case "1":
         
-      const apiPath = 'apikey.txt';
+     const envPath = '.env';
+     const APIKEY = "API_KEY=";
+     const REGION = "REGION=";
+     const BUCKETNAME = "BUCKET_NAME=";
+
+     //config.apiKeyId = readline.question(`Please enter your API Key: \n`);
+     var temp_api = readline.question(`Please enter your API Key: \n`); 
+     fs.writeFileSync(envPath, APIKEY+temp_api+'\n');
+        
+     var region = readline.question(`
+     Select Region
+         1. US South
+         2. US East
+         3. United Kingdom
+         4. EU Germany
+         \n`);
+     switch (region) {
+       case "1":
+         region = "us-south";
+         break;
+       case "2":
+         region = "us-east";
+         break;
+       case "3":
+         region = "eu-gb";
+         break;
+       case "4":
+         region = "eu-de";
+         break;
+     }
+     fs.appendFileSync(envPath, REGION+region+'\n');
+
+
+
+     /* const apiPath = 'apikey.txt';
         try {
           if (fs.existsSync(apiPath)) {
             //file exists
@@ -36,12 +66,13 @@ const main = async function () {
           else{
             //file doesn't exist
             config.apiKeyId = readline.question(`Please enter your API Key: \n`);
-            fs.writeFileSync(apiPath, config.apiKeyId) //will write file if it doesn't exist
+            fs.writeFileSync(apiPath, config.apiKeyId); //will write file if it doesn't exist
           }
         } catch(err) {
-          console.error(err)
+          console.error(err);
         } 
-       
+      
+        */
       
         
        
