@@ -1,6 +1,6 @@
 const fs = require("fs");
 const { gzip, ungzip } = require("node-gzip");
-async function getData(cos, bucket, itemName) {
+function getData(cos, bucket, itemName) {
   return new Promise(function (resolve, reject) {
     cos.getObject({ Bucket: bucket, Key: itemName }, function (err, data) {
       if (err) {
@@ -19,7 +19,9 @@ function getBucketContents(bucketName, cosClient) {
     .then(async (data) => {
       if (data != null && data.Contents != null) {
         for (var i = 0; i < data.Contents.length; i++) {
-          await getItem(bucketName, data.Contents[i].Key, cosClient);
+          if (i == data.Contents.length - 1)
+            await getItem(bucketName, data.Contents[i].Key, cosClient);
+          else getItem(bucketName, data.Contents[i].Key, cosClient);
         }
       }
     })
