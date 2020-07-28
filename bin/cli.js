@@ -11,6 +11,7 @@ console.log(
 const getFlowLog = require("../index.js").main;
 const parse = require("../flow_parse.js").input;
 const getLogErrors = require("../backend/getLogErrors.js");
+const clearLogs = require("../functions/clearLogs.js").clearLogs;
 function printHelp() {
   let overview = "OVERVIEW: \n\t";
   let overview_description =
@@ -23,7 +24,8 @@ function printHelp() {
   let commands_description =
     "-flowlog get, follow the prompt to retrieve flow logs from available COS buckets that are associated with flow log collectors. \n" +
     "\t-flowlog parse, select an option between parsing and printing the logs by different attributes or to print the logs into a new file \n" +
-    "\t-flowlog scan, detects any actions that were rejected from the flow logs stored locally \n";
+    "\t-flowlog scan, detects any actions that were rejected from the flow logs stored locally \n" +
+    "\t-flowlog clear, deletes all flow logs that are stored locally\n";
   console.log(
     overview.bold +
       overview_description +
@@ -36,12 +38,13 @@ function printHelp() {
       commands_description
   );
 }
-const main = async function () {
+const main = async function() {
   do {
     var option = readline.question(`choose option
         1. (get) newest flowlogs
         2. (Parse) flowlogs stored
         3. (scan) check for errors
+        4. (clear) delete flowlogs
         q. exit
         \n`);
     console.log(option);
@@ -61,6 +64,11 @@ const main = async function () {
       case "Scan":
         getLogErrors();
         break;
+      case "4":
+      case "clear":
+      case "Clear":
+        clearLogs();
+        break;
       case "q":
         console.log("exiting...\n\n\n\n\n");
         option = -1;
@@ -79,6 +87,9 @@ switch (process.argv[2]) {
     break;
   case "scan":
     getLogErrors();
+    break;
+  case "clear":
+    clearLogs();
     break;
   case "-v":
     console.log("flowlog version: " + version);
