@@ -42,7 +42,7 @@ Prior to creating a flow log collector, ensure that you have met the following p
 
     Make sure to note the region of the COS that contains your flow logs, considering that is what you are prompted for when the CLI pulls them to your local depository.
 
-#### Terminl Prerequisites
+#### Terminal Prerequisites
 
 - Must have node js installed.
 
