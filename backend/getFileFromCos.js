@@ -35,18 +35,29 @@ async function getItem(bucketName, itemName, cosClient) {
   itemName = itemName.split("/");
   let fileName = itemName[itemName.length - 1];
   try {
-    if (fs.existsSync("./logs/" + fileName.split(".")[0] + ".json")) {
+    if (
+      fs.existsSync(
+        "./logs/" + bucketName + "/" + fileName.split(".")[0] + ".json"
+      )
+    ) {
       console.log(fileName.split(".")[0] + ".json already exists.");
     } else {
       if (fileName.endsWith(".gz")) {
         let decompressed = await ungzip(Buffer.from(objectData.Body));
+        var dir = "./logs";
+        var dir2 = "./logs/" + bucketName;
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir);
+        }
+        if (!fs.existsSync(dir2)) {
+          fs.mkdirSync(dir2);
+        }
         fs.writeFile(
-          "./logs/" + fileName.split(".")[0] + ".json",
+          dir2 + "/" + fileName.split(".")[0] + ".json",
           decompressed,
           function (err) {
             if (err) console.log(err);
             console.log(fileName.split(".")[0] + ".json Written Successfully.");
-            done();
           }
         );
       }
