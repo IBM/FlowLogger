@@ -42,7 +42,7 @@ Prior to creating a flow log collector, ensure that you have met the following p
 
     Make sure to note the region of the COS that contains your flow logs, considering that is what you are prompted for when the CLI pulls them to your local depository.
 
-#### Terminl Prerequisites
+#### Terminal Prerequisites
 
 - Must have node js installed.
 
@@ -53,7 +53,7 @@ Prior to creating a flow log collector, ensure that you have met the following p
 - Run `npm install chalk clear figlet colors` in the project directory
 - Run `sudo npm install -g .` to package the program as a global command
 
-- in package.json, under `scripts` set the `test` attribute value to `jest`
+- In the package.json file, under `scripts`, set the `test` attribute value to `jest`
 - run `npm test` in terminal to exectue tests
 
 #### Commands
@@ -75,4 +75,4 @@ Prior to creating a flow log collector, ensure that you have met the following p
 
 - [IBM Virtual Private Cloud](https://cloud.ibm.com/docs/vpc?topic=vpc-getting-started)
 - [IBM Flowlogs (Beta)](https://cloud.ibm.com/docs/vpc?topic=vpc-flow-logs&locale=en)
-- [IBM Cloud Object Storage](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-getting-started-cloud-object-storage)
+- [IBM Cloud Object Storage](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-getting-started-cloud-object-storage) 
