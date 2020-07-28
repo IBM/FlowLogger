@@ -3,6 +3,5 @@ node_js:
   - "stable"
 before_script:
   - npm install
-  - npm install gunzip-file
 script:
   - npm test
