@@ -2,15 +2,16 @@ const readline = require("readline-sync");
 const myCOS = require("ibm-cos-sdk");
 const config = {
   endpoint: "",
-  apiKeyId: ""
+  apiKeyId: "",
 };
 const getCollectors = require("./backend/getFlowLogs");
 const getCOS = require("./backend/getFileFromCos");
 
-const main = async function() {
+const main = async function () {
+  var option;
   while (true) {
-    var option;
-    option = readline.question(`choose option
+    if (option != "wait")
+      option = readline.question(`choose option
         1. get flowlogs
         q. return to home prompt
         \n`);
@@ -41,7 +42,6 @@ const main = async function() {
           return;
         }
         break;
-
       case "q":
         console.log("returning...\n\n\n\n\n");
         return;
