@@ -2,7 +2,7 @@ const readline = require("readline-sync");
 const myCOS = require("ibm-cos-sdk");
 const config = {
   endpoint: "",
-  apiKeyId: "IvFGFLLYyQz3z4n_Ts8SXVgm6ofec-LzFyAr7hPG-hHk",
+  apiKeyId: "",
 };
 const getCollectors = require("./backend/getFlowLogs");
 const getCOS = require("./backend/getFileFromCos");
