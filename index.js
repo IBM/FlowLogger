@@ -4,7 +4,7 @@ const config = {
   endpoint: "",
   apiKeyId: ""
 };
-const getCollectors = require("./backend/getFlowLogs");
+const getCollectors = require("./backend/getFlowLogs").main;
 const getCOS = require("./backend/getFileFromCos");
 
 const main = async function() {
