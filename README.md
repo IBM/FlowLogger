@@ -53,7 +53,7 @@ Prior to creating a flow log collector, ensure that you have met the following p
 - Run `npm install chalk clear figlet colors` in the project directory
 - Run `sudo npm install -g .` to package the program as a global command
 
-- in package.json, under `scripts` set the `test` attribute value to `jest`
+- In the package.json file, under `scripts`, set the `test` attribute value to `jest`
 - run `npm test` in terminal to exectue tests
 
 #### Commands
