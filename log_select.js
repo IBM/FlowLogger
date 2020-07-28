@@ -9,13 +9,35 @@ const { time } = require('console');
 var file_dir = "./logs"; //directory of the folder where json files are
 const logFolder = './logs';
 
+//Pulls all of the different values in a json file from the selectetd folder and returns an array
+function getFilters(){
+    let files = fs.readdirSync(file_dir)
+
+    filter_arr = []
+    files.forEach(function(file){
+        var fromPath = path.join(file_dir,file)
+        stat_file = fs.statSync(fromPath)
+        if(stat_file.isFile()){
+            var log_file = fs.readFileSync(fromPath)
+            if(file.includes("DS_Store")===false){
+                var flow_log = JSON.parse(log_file)
+                filter_arr.push(flow_log.flow_logs)
+            }
+        }
+    });
+    return filter_arr
+}
+
+
 
 //Asks the user what attributes they want to filter the json files by
 function get_attributes(){
+    filter_arr = getFilters()
     var keys = []
     var count = 0;
     var attributes = [];
     var filters = [];
+    var attribute;
     console.log("Attributes to filter by: \n\n");
     for(var k in attribute_list.flow_logs[0]){
         count+=1;
@@ -41,10 +63,33 @@ function get_attributes(){
             }
             attribute = keys[attribute-1]
         }
+        var filter_list = []
         attributes.push(attribute)
+
+        for(var w=0;w<filter_arr.length;w++){
+            filter_list.push(filter_arr[w].attribute)
+            for(var j=0;j<filter_arr[w].length;j++){
+                filter_list.push(filter_arr[w][j][attribute])
+            }
+        }
+        var o;
+        filter_list.unshift(o)
+        var unique = filter_list.filter((v, s, a) => a.indexOf(v) === s);
+        unique = unique.slice(1)
+        for(var j=0;j<unique.length;j++){
+            console.log(String.fromCharCode(97 + j)+". "+unique[j])
+        }
+        
         var filter = readline.question(i+1+". Choose the value of that attribute you want to filter by: ")
-        if(filter==='q'){
-            return
+        if(filter>='a'&&filter<=String.fromCharCode(97 + j)){
+            filter = unique[filter.charCodeAt(0) - 97]
+        }
+        while(!unique.includes(filter)){
+            filter = readline.question("Please retype the filter or press q to quit")
+            if(filter==='q'){
+                breakout = true
+                break
+            }
         }
         filters.push(filter)
     }
@@ -53,6 +98,7 @@ function get_attributes(){
 
 
 //Reads through each file in the specified directory and converts it into a JSON file
+//Calls filter_by and uses returned value to determine if file fits specification
 function readfiles(attributes,filters){
     let files = fs.readdirSync(file_dir)
     files.forEach(function(file){
@@ -96,7 +142,7 @@ function filter_by(flow_log,attributes, filter){
     return false
 }
 
-
+//Function that allows user to select a specific log from the folder
 function selectLog(){
     var count=0;
     var files={};
@@ -164,8 +210,6 @@ function time_filter(){
         return;
     }
     let files = fs.readdirSync(file_dir)
-    //console.log(files)
-
     files.forEach(function(file){
         var fromPath = path.join(file_dir,file)
         stat_file = fs.statSync(fromPath)
@@ -185,26 +229,28 @@ function time_filter(){
 
 function main(){
     var option;
-    option = readline.question(`choose option
-    1. select logs
-    2. filter files by attributes
-    3. filter by time
-    4. exit
-    \n`);
-    switch(option){
-        case "1":
-            console.log(selectLog())
-            break
-        case "2":
-            get_attributes()
-            break
-        case "3":
-            time_filter()
-            break
-        case "4":
-            option = -1
-            break;
-    }
+    do{
+        option = readline.question(`choose option
+        1. select logs
+        2. filter files by attributes
+        3. filter by time
+        4. exit
+        \n`);
+        switch(option){
+            case "1":
+                console.log(selectLog())
+                break
+            case "2":
+                get_attributes()
+                break
+            case "3":
+                time_filter()
+                break
+            case "4":
+                option = -1
+                break;
+        }
+    }while(option!=-1)
 }
 
 module.exports.main = main;
