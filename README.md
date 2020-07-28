@@ -47,7 +47,7 @@ Prior to creating a flow log collector, ensure that you have met the following p
 - Install node js with `brew install node`.
 
 - Run `npm install readline-sync` in the project directory. This package allows an easy way to obtain user input.
-- Run `npm install axios ibm-cos-sdk qs` in the project directory
+- Run `npm install axios ibm-cos-sdk qs node-gzip` in the project directory
 - Run `npm install chalk clear figlet colors` in the project directory
 - Run `sudo npm install -g .` to package the program as a global command
 

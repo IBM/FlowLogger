@@ -1,46 +1,50 @@
-const readline = require("readline-sync");
 const fs = require("fs");
-const colors = require("colors");
+const { gzip, ungzip } = require("node-gzip");
+function getData(cos, bucket, itemName) {
+  return new Promise(function (resolve, reject) {
+    cos.getObject({ Bucket: bucket, Key: itemName }, function (err, data) {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(data);
+    });
+  });
+}
 function getBucketContents(bucketName, cosClient) {
   console.log(`Retrieving bucket contents from: ${bucketName}`);
   return cosClient
     .listObjects({ Bucket: bucketName })
     .promise()
-    .then(async data => {
+    .then(async (data) => {
       if (data != null && data.Contents != null) {
         for (var i = 0; i < data.Contents.length; i++) {
-          await getItem(bucketName, data.Contents[i].Key, cosClient);
+          if (i == data.Contents.length - 1)
+            await getItem(bucketName, data.Contents[i].Key, cosClient);
+          else getItem(bucketName, data.Contents[i].Key, cosClient);
         }
       }
     })
-    .catch(e => {
+    .catch((e) => {
       console.error(`ERROR: ${e.code} - ${e.message}\n`.red);
     });
 }
-function getItem(bucketName, itemName, cosClient) {
-  console.log(`Retrieving item from bucket: ${bucketName}, key: ${itemName}`);
-  return cosClient
-    .getObject({
-      Bucket: bucketName,
-      Key: itemName
-    })
-    .promise()
-    .then(data => {
-      if (data != null) {
-        try {
-          fs.writeFileSync(
-            "./logs/" + itemName,
-            Buffer.from(data.Body).toString()
-          );
-          console.log("File written successfully");
-        } catch (err) {
-          console.error(err);
-        }
+
+async function getItem(bucketName, itemName, cosClient) {
+  let objectData = await getData(cosClient, bucketName, itemName);
+  itemName = itemName.split("/");
+  let fileName = itemName[itemName.length - 1];
+  if (fileName.endsWith(".gz")) {
+    let decompressed = await ungzip(Buffer.from(objectData.Body));
+    fs.writeFile(
+      "./logs/" + fileName.split(".")[0] + ".json",
+      decompressed,
+      function (err) {
+        if (err) return console.log(err);
+        console.log(fileName.split(".")[0] + ".json Written Successfully.");
       }
-    })
-    .catch(e => {
-      console.error(`ERROR: ${e.code} - ${e.message}\n`);
-    });
+    );
+  }
 }
 exports.getBucketContents = getBucketContents;
 exports.getItem = getItem;
