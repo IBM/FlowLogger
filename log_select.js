@@ -226,7 +226,6 @@ function time_filter(){
     });
    
 }
-
 function main(){
     var option;
     do{
@@ -253,6 +252,6 @@ function main(){
     }while(option!=-1)
 }
 
-module.exports.main = main;
-module.exports = filter_by;
-main()
+//module.exports.main = main;
+module.exports = {main};
+//main()

@@ -11,6 +11,7 @@ console.log(
 const getFlowLog = require("../index.js").main;
 const parse = require("../flow_parse.js").input;
 const getLogErrors = require("../backend/getLogErrors.js");
+const filter1 = require("../log_select.js");
 function printHelp() {
   let overview = "OVERVIEW: \n\t";
   let overview_description =
@@ -23,7 +24,9 @@ function printHelp() {
   let commands_description =
     "-flowlog get, follow the prompt to retrieve flow logs from available COS buckets that are associated with flow log collectors. \n" +
     "\t-flowlog parse, select an option between parsing and printing the logs by different attributes or to print the logs into a new file \n" +
-    "\t-flowlog scan, detects any actions that were rejected from the flow logs stored locally \n";
+    "\t-flowlog scan, detects any actions that were rejected from the flow logs stored locally \n"+
+    "\t-flowlog filter, lets you filter all of the flow logs in an entire folder by attributes or time interval \n"
+    ;
   console.log(
     overview.bold +
       overview_description +
@@ -42,6 +45,7 @@ const main = async function () {
         1. (get) newest flowlogs
         2. (Parse) flowlogs stored
         3. (scan) check for errors
+        4. (filter) through log folder
         q. exit
         \n`);
     console.log(option);
@@ -61,6 +65,12 @@ const main = async function () {
       case "Scan":
         getLogErrors();
         break;
+      case "4":
+      case "filter":
+      case "Filter":
+        filter1.main();
+        break;
+    
       case "q":
         console.log("exiting...\n\n\n\n\n");
         option = -1;
@@ -79,6 +89,9 @@ switch (process.argv[2]) {
     break;
   case "scan":
     getLogErrors();
+    break;
+  case "filter":
+    filter1.main();
     break;
   case "-v":
     console.log("flowlog version: " + version);
