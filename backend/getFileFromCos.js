@@ -24,7 +24,9 @@ async function getBucketContents(bucketName, cosClient) {
           promises.push(getItem(bucketName, data.Contents[i].Key, cosClient));
         }
       console.log("Found " + promises.length + " items.");
-      await Promise.all(promises);
+      await Promise.all(promises).then(() => {
+        console.log(`All logs are written to ./logs/${bucketName}/`);
+      });
     })
     .catch((e) => {
       console.error(`ERROR: ${e.code} - ${e.message}\n`.red);
