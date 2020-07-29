@@ -9,13 +9,35 @@ const { time } = require('console');
 var file_dir = "./logs"; //directory of the folder where json files are
 const logFolder = './logs';
 
+//Pulls all of the different values in a json file from the selectetd folder and returns an array
+function getFilters(){
+    let files = fs.readdirSync(file_dir)
+
+    filter_arr = []
+    files.forEach(function(file){
+        var fromPath = path.join(file_dir,file)
+        stat_file = fs.statSync(fromPath)
+        if(stat_file.isFile()){
+            var log_file = fs.readFileSync(fromPath)
+            if(file.includes("DS_Store")===false){
+                var flow_log = JSON.parse(log_file)
+                filter_arr.push(flow_log.flow_logs)
+            }
+        }
+    });
+    return filter_arr
+}
+
+
 
 //Asks the user what attributes they want to filter the json files by
 function get_attributes(){
+    filter_arr = getFilters()
     var keys = []
     var count = 0;
     var attributes = [];
     var filters = [];
+    var attribute;
     console.log("Attributes to filter by: \n\n");
     for(var k in attribute_list.flow_logs[0]){
         count+=1;
@@ -33,66 +55,68 @@ function get_attributes(){
             return
         }
         if(attribute.length<=2){
+            while(attribute>=22||attribute<=0){
+                attribute = readline.question("Invalid number choice, choose a new number or q to quit")
+                if(attribute==='q'){
+                    break
+                }
+            }
             attribute = keys[attribute-1]
         }
+        var filter_list = []
         attributes.push(attribute)
+
+        for(var w=0;w<filter_arr.length;w++){
+            filter_list.push(filter_arr[w].attribute)
+            for(var j=0;j<filter_arr[w].length;j++){
+                filter_list.push(filter_arr[w][j][attribute])
+            }
+        }
+        var o;
+        filter_list.unshift(o)
+        var unique = filter_list.filter((v, s, a) => a.indexOf(v) === s);
+        unique = unique.slice(1)
+        for(var j=0;j<unique.length;j++){
+            console.log(String.fromCharCode(97 + j)+". "+unique[j])
+        }
+        
         var filter = readline.question(i+1+". Choose the value of that attribute you want to filter by: ")
-        if(filter==='q'){
-            return
+        if(filter>='a'&&filter<=String.fromCharCode(97 + j)){
+            filter = unique[filter.charCodeAt(0) - 97]
+        }
+        while(!unique.includes(filter)){
+            filter = readline.question("Please retype the filter or press q to quit")
+            if(filter==='q'){
+                breakout = true
+                break
+            }
         }
         filters.push(filter)
     }
     readfiles(attributes,filters)
 }
 
-//iterates through every file in the folder
-function readfiles(attributes,filters){
-    fs.readdir(file_dir, function (err, files) {
-        if (err) {
-            console.error("Could not list the directory.", err);
-            process.exit(1);
-        }
-        files.forEach(function (file, index) {
-            var fromPath = path.join(file_dir, file);
-            fs.stat(fromPath, function (error, stat) {
-                if (error) {
-                    console.error("Error stating file.", error);
-                    return;
-                }
 
-                if (stat.isFile()){
-                    input(file,attributes,filters)
+//Reads through each file in the specified directory and converts it into a JSON file
+//Calls filter_by and uses returned value to determine if file fits specification
+function readfiles(attributes,filters){
+    let files = fs.readdirSync(file_dir)
+    files.forEach(function(file){
+        var fromPath = path.join(file_dir,file)
+        stat_file = fs.statSync(fromPath)
+        if(stat_file.isFile()){
+            var log_file = fs.readFileSync(fromPath)
+            if(file.includes("DS_Store")===false){
+                var flow_log = JSON.parse(log_file)
+                
+                if(filter_by(flow_log,attributes,filters)){
+                    console.log("The file "+file+" fits the attributes")
                 }
-            });
-        });
+            }
+        }
     });
 }
 
-//reads the files (path provided readfiles) and then converts them into JSON object
-function input(stat,attributes,filter){
-    var og = stat
-    stat = file_dir+"/"+stat
-
-    fs.readFile(stat, 'utf8', (err, jsonString) => {
-        if (err) {
-            console.log("Error reading file from disk:", err)
-            return
-        }
-        try {
-            if(og.includes("DS_Store")===false){
-                flow_log = JSON.parse(jsonString)
-
-                if(filter_by(flow_log,attributes,filter)){
-                    console.log("The file "+stat+" fits the criteria")
-                }
-        }
-
-    } catch(err) {
-        console.log('Error parsing JSON string:', err)
-        return
-        }
-    })
-}
 
 //returns true if the flow_log passed in has a flow log that contains attributes that match what the user is looking for
 function filter_by(flow_log,attributes, filter){
@@ -118,7 +142,7 @@ function filter_by(flow_log,attributes, filter){
     return false
 }
 
-
+//Function that allows user to select a specific log from the folder
 function selectLog(){
     var count=0;
     var files={};
@@ -136,21 +160,98 @@ function selectLog(){
     }
 }
 
-function main(){
-    var option;
-    option = readline.question(`choose option
-    1. select logs
-    2. filter files by attributes
-    3. exit
-    \n`);
-    switch(option){
-        case "1":
-            console.log(selectLog())
-            break
-        case "2":
-            get_attributes()
-            break
+
+//returns true if the end time of a log is between the given start and end date and false otherwise
+function time_elapsed(log,start_date,end_date){
+    var compare = new Date(log['capture_end_time'])
+    if(compare.getTime()>=start_date.getTime()&&compare.getTime()<=end_date.getTime()){
+        return true;
     }
+    return false;
 }
 
-module.exports.main = main;
+//the user inputs a time interval and the function returns which flow logs in the log folder fit the specific time frame
+function time_filter(){
+    var option = readline.question(`choose option
+    1. Select a start and end time
+    2. Choose how many minutes you want to go back
+    3. exit
+    \n`);
+    var time_zone=0;
+    var start_time;
+    var end_time;
+    if(option==='1'){
+        time_zone = readline.question("Input the time shift you want from GMT i.e. -5 for EST")
+        start_time = readline.question("Choose the start date of the flow logs in YYYY-MM-DD format: ")
+        start_time = start_time+"T" + readline.question("Choose the start time of the flow log in HH:MM:SS format: ")+"Z"
+        end_time = readline.question("Choose the end date of the flow logs in YYYY-MM-DD format, type now if you want to use the current time: ")
+        end_time = start_time+"T" + readline.question("Choose the end time of the flow log in HH:MM:SS format, type now if you want to use the current time: ")+"Z"
+        start_time = new Date(start_time)
+        start_time.setHours(start_time.getHours()-time_zone)
+        if(end_time.includes("now")){
+            end_time = new Date()
+        }else{
+        var end_time = new Date(end_time)
+        end_itme.setHours(end_time.getHours()-time_zone)
+
+        }
+        console.log(start_time)
+    }
+    if(option==='2'){
+        var minutes = readline.question("How many minutes do you wanna go back?")
+        start_time = new Date()
+        console.log(minutes)
+        start_time.setMinutes(start_time.getMinutes()-minutes)
+        console.log(start_time)
+        end_time = new Date()
+    }
+
+    if(option==='3'||option==='q'){
+        return;
+    }
+    let files = fs.readdirSync(file_dir)
+    files.forEach(function(file){
+        var fromPath = path.join(file_dir,file)
+        stat_file = fs.statSync(fromPath)
+        if(stat_file.isFile()){
+            var log_file = fs.readFileSync(fromPath)
+            if(file.includes("DS_Store")===false){
+                var flow_log = JSON.parse(log_file)
+                
+                if(time_elapsed(flow_log,start_time,end_time)){
+                    console.log("The file "+file+" is in the time range")
+                }
+            }
+        }
+    });
+   
+}
+function main(){
+    var option;
+    do{
+        option = readline.question(`choose option
+        1. select logs
+        2. filter files by attributes
+        3. filter by time
+        4. exit
+        \n`);
+        switch(option){
+            case "1":
+                console.log(selectLog())
+                break
+            case "2":
+                get_attributes()
+                break
+            case "3":
+                time_filter()
+                break
+            case "4":
+                option = -1
+                break;
+        }
+    }while(option!=-1)
+}
+
+//module.exports.main = main;
+module.exports = {main};
+//main()

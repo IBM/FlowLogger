@@ -73,4 +73,4 @@ Prior to creating a flow log collector, ensure that you have met the following p
 
 - [IBM Virtual Private Cloud](https://cloud.ibm.com/docs/vpc?topic=vpc-getting-started)
 - [IBM Flowlogs (Beta)](https://cloud.ibm.com/docs/vpc?topic=vpc-flow-logs&locale=en)
-- [IBM Cloud Object Storage](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-getting-started-cloud-object-storage)
+- [IBM Cloud Object Storage](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-getting-started-cloud-object-storage) 
