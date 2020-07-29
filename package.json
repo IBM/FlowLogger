@@ -19,6 +19,8 @@
     "qs": "^6.9.4",
     "readline-sync": "^1.4.10"
   },
+  
+   
   "bin": {
     "flowlog": "bin/cli.js"
   },
@@ -32,3 +34,5 @@
   "author": "",
   "devDependencies": {}
 }
+
+
