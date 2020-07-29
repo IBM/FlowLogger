@@ -11,20 +11,28 @@ function date_time(date) {
 }
 
 //Function made by Daroush that allows the user to select a certain log by number from the logs folder
-function selectLog() {
-  let count = 0;
-  var files = {};
-  fs.readdirSync(logFolder).forEach(file => {
-    files[count] = file;
-    console.log(count + ". " + file);
-    count++;
-  });
-  var selection = readline.question(`\nselect log\n`);
-  if (selection >= 0 && selection < count) {
-    return "./logs/" + files[selection];
-  }
+function selectLog(){
+    let count=0;
+    var files={};
+    fs.readdirSync(logFolder).forEach(file => {
+        files[count]=file;
+        console.log(count+". "+file);
+        count++;
+    });
+    var selection = readline.question(`\nselect log\n`);
+    if(selection=='q'){
+        return
+    }
+    while(selection<0||selection>=count){
+        selection = readline.question("Not a valid log, enter again")
+        if(selection=='q'){
+            return
+        }
+    }
+    if(selection>=0 && selection<count){
+        return "./logs/"+files[selection];
+    }
 }
-
 //Outputs flow logs that match the filter requirement of an attribute given by the user
 
 //TODO: filter by multiple attributes
@@ -121,81 +129,105 @@ function main() {
         3. save to a file
         4. return to home prompt
         \n`);
+        switch(option) {
 
-    switch (option) {
-      case "1":
-        console.log("you've selected option 1:\n\n");
-        console.log(flow_log);
-        break;
-      case "2":
-        var keys = [];
-        console.log("Attributes to filter by: \n\n");
-        var count = 0;
-        for (var k in flow_log.flow_logs[0]) {
-          count += 1;
-          console.log(count + ". " + k);
-          keys.push(k);
+            case "1":
+                console.log("you've selected option 1:\n\n");
+                console.log(flow_log)
+                break;
+            case "2":
+                var breakout = false
+                var keys = []
+                console.log("Attributes to filter by: \n\n");
+                var count = 0;
+                for(var k in flow_log.flow_logs[0]){
+                    count+=1;
+                    console.log(count+". "+k)
+                    keys.push(k)
+                }
+                var attributes = [];
+                var filters = [];
+                var amt = readline.question("How many attributes do you want to filter by? Press q to quit")
+                if(amt=='q'){
+                    break;
+                }
+                    for(var i=0;i<amt;i++){
+                        var attribute = readline.question(i+1+". Choose an attribute to filter by (type out the name or choose a number): ")
+                        if(attribute=='q'){
+                            break;
+                        }
+                        if(attribute.length<=2){
+                            while(attribute>=22||attribute<=0){
+                                attribute = readline.question("Invalid number choice, choose a new number or q to quit")
+                                if(attribute==='q'){
+                                    break
+                                }
+                            }
+                            attribute = keys[attribute-1]
+                        }
+                        while(!keys.includes(attribute)){
+                            attribute = readline.question("Please retype the attribute you want to filter by or press q to quit")
+                            if(attribute==='q'){
+                                break
+                            }
+                        }
+                        if(attribute==='q'){
+                            break
+                        }
+                        var list_val = []
+                        
+                        attributes.push(attribute)
+                        for(var j=0;j<flow_log.flow_logs.length;j++){
+                            list_val.push(flow_log.flow_logs[j][attribute])
+                        }
+                        var unique = list_val.filter((v, s, a) => a.indexOf(v) === s);
+                        for(var j=0;j<unique.length;j++){
+                            console.log(String.fromCharCode(97 + j)+". "+unique[j])
+                        }
+                        var filter = readline.question(i+1+". Choose the value of that attribute you want to filter by: ")
+
+                        if(filter>='a'&&filter<=String.fromCharCode(97 + j)){
+                            filter = unique[filter.charCodeAt(0) - 97]
+                        }
+                        while(!unique.includes(filter)){
+                            filter = readline.question("Please retype the filter or press q to quit")
+                            if(filter==='q'){
+                                breakout = true
+                                break
+                            }
+
+                        }
+                        if(filter==='q'){
+                            breakout = true
+                            break;
+                        }
+
+                        filters.push(filter)
+                    }
+                    if(breakout){
+                        break;
+                    }
+                    filter_by(flow_log, attributes,filters);
+                break;
+
+            case "3":
+                var file_name = readline.question("Type in the file you want to save to: ")
+                if(file_name=='q'){
+                    break
+                }
+                output(file_name)
+                break;
+                
+            case "4":
+                console.log("exiting...\n\n\n\n\n");
+                option=-1;
+                break;
+
+            default:
+                console.log("invalid option\n\n\n\n\n");   
         }
-        var attributes = [];
-        var filters = [];
-        var amt = readline.question(
-          "How many attributes do you want to filter by? Press q to quit"
-        );
-        if (amt == "q") {
-          break;
-        }
-        for (var i = 0; i < amt; i++) {
-          var attribute = readline.question(
-            i + 1 + ". Choose an attribute to filter by: "
-          );
-          if (attribute == "q") {
-            break;
-          }
-          if (attribute.length <= 2) {
-            attribute = keys[attribute - 1];
-          }
-          var list_val = [];
-          attributes.push(attribute);
-          for (var j = 0; j < flow_log.flow_logs.length; j++) {
-            list_val.push(flow_log.flow_logs[j][attribute]);
-          }
-          var unique = list_val.filter((v, s, a) => a.indexOf(v) === s);
-          for (var j = 0; j < unique.length; j++) {
-            console.log(String.fromCharCode(97 + j) + ". " + unique[j]);
-          }
-          var filter = readline.question(
-            i +
-              1 +
-              ". Choose the value of that attribute you want to filter by: "
-          );
-
-          if (filter >= "a" && filter <= "z") {
-            filter = unique[filter.charCodeAt(0) - 97];
-          }
-          filters.push(filter);
-        }
-        filter_by(flow_log, attributes, filters);
-        break;
-
-      case "3":
-        var file_name = readline.question(
-          "Type in the file you want to save to: "
-        );
-        if (file_name == "q") {
-          break;
-        }
-        output(file_name);
-        break;
-
-      case "4":
-        console.log("exiting...\n\n\n\n\n");
-        option = -1;
-        break;
-
-      default:
-        console.log("invalid option\n\n\n\n\n");
-    }
   } while (option != -1);
 }
+
 module.exports.input = input;
 module.exports.filter_by = filter_by;
