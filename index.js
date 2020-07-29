@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const readline = require("readline-sync");
 const fs = require('fs');
 const myCOS = require("ibm-cos-sdk");
@@ -5,8 +7,9 @@ const config = {
   endpoint: "",
   apiKeyId: "",
 };
-const getCollectors = require("./backend/getFlowLogs");
+const getCollectors = require("./backend/getFlowLogs").main;
 const getCOS = require("./backend/getFileFromCos");
+const { getRegion } = require("./backend/getFlowLogs");
 
 
 
@@ -20,42 +23,9 @@ const main = async function () {
 
     switch (option) {
       case "1":
-        
-     const envPath = '.env';
-     const APIKEY = "API_KEY=";
-     const REGION = "REGION=";
-     const BUCKETNAME = "BUCKET_NAME=";
-
-     //config.apiKeyId = readline.question(`Please enter your API Key: \n`);
-     var temp_api = readline.question(`Please enter your API Key: \n`); 
-     fs.writeFileSync(envPath, APIKEY+temp_api+'\n');
-        
-     var region = readline.question(`
-     Select Region
-         1. US South
-         2. US East
-         3. United Kingdom
-         4. EU Germany
-         \n`);
-     switch (region) {
-       case "1":
-         region = "us-south";
-         break;
-       case "2":
-         region = "us-east";
-         break;
-       case "3":
-         region = "eu-gb";
-         break;
-       case "4":
-         region = "eu-de";
-         break;
-     }
-     fs.appendFileSync(envPath, REGION+region+'\n');
-
-
-
-     /* const apiPath = 'apikey.txt';
+    
+      /*
+      const apiPath = 'apikey.txt';
         try {
           if (fs.existsSync(apiPath)) {
             //file exists
@@ -71,19 +41,59 @@ const main = async function () {
         } catch(err) {
           console.error(err);
         } 
-      
+        
         */
+    
+     const envPath = '.env';
+     const APIKEY = "API_KEY=";
+     const REGION = "REGION=";
+     const ENDPOINT = "ENDPOINT=";
+     const BUCKETNAME = "BUCKET_NAME=";
+
+     var region = "";
+     var bucketName = "";
       
+       try {
+        if (fs.existsSync(envPath)) {
+          //file exists
+          console.log(process.env['APIKEY']);
+          config.apiKeyId = process.env['APIKEY'];
+          config.endpoint = process.env['ENDPOINT'];
+          bucketName = process.env['BUCKETNAME'];
+          region = process.env['REGION'];
+
+        }
+        else{
+          //file doesn't exist
+          config.apiKeyId = readline.question(`Please enter your API Key: \n`); 
+          fs.writeFileSync(envPath, APIKEY+config.apiKeyId+'\n'); //will write file if it doesn't exist 
+          
+          console.log("getregion");
+          var regionArr = getRegion();
+          region = regionArr[0];
+          config.endpoint = regionArr[1];
+          console.log("getCollectors");
+          const collectors = await getCollectors(config.apiKeyId, region);
+          bucketName = collectors[0];
+
+          fs.appendFileSync(envPath, REGION+region+'\n');
+          fs.appendFileSync(envPath, ENDPOINT+config.endpoint+'\n');
+          fs.appendFileSync(envPath, BUCKETNAME+bucketName+'\n');
+
+        }
+      } catch(err) {
+        console.error(err);
+      } 
         
-       
-       
+
         // Get bucketName and region endpoint
-        
-        const collectors = await getCollectors(config.apiKeyId);
-        const bucketName = collectors[0];
-        config.endpoint = collectors[1];
-        var cosClient = new myCOS.S3(config);
+        //const collectors = await getCollectors(config.apiKeyId);
+        //const bucketName = collectors[0];
+        //config.endpoint = collectors[1];
+        //fs.appendFileSync(envPath, BUCKETNAME+bucketName+'\n');
+
         // Retrieve all items from the COS bucket
+        var cosClient = new myCOS.S3(config);
         await getCOS.getBucketContents(bucketName, cosClient); 
         break;
 
