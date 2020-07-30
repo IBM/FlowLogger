@@ -1,6 +1,7 @@
 const logFolder = "./logs";
 const fs = require("fs");
 const readline = require("readline-sync");
+const colors = require("colors");
 
 function selectLog() {
   var count = 1;
@@ -30,4 +31,5 @@ function selectLog() {
   );
   return require("../logs/" + files[selection]);
 }
+
 module.exports = selectLog;
