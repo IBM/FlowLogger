@@ -69,7 +69,7 @@ const main = async function() {
       case "4":
       case "clear":
       case "Clear":
-        clearLogs();
+        console.log(clearLogs());
         break;
       case "5":
       case "filter":
@@ -97,7 +97,7 @@ switch (process.argv[2]) {
     getLogErrors();
     break;
   case "clear":
-    clearLogs();
+    console.log(clearLogs());
     break;
   case "filter":
     filter1.main();
