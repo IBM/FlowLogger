@@ -1,15 +1,16 @@
 const readline = require("readline-sync");
-var access_token = "";
-var refresh_token = "";
-var apikey;
+const colors = require("colors");
+
 const axios = require("axios");
 const qs = require("qs");
-var regionEndpoint = "";
+
 var bucketName = "";
 var problem = false;
 
+var region = "";
 // getting token to perform api requests
-async function getTokens() {
+async function getTokens(apikey) {
+  var access_token = "";
   await axios({
     method: "post",
     headers: {
@@ -24,21 +25,19 @@ async function getTokens() {
   })
     .then(async res => {
       access_token = res.data.access_token;
-      refresh_token = res.data.refresh_token;
     })
     .catch(error => {
       console.log(error);
       problem = true;
     });
+
+  return access_token;
 }
 // collecting available flow log collectors for specified region
-async function getCollectors(apiKey) {
-  apikey = apiKey;
-  await getTokens();
+async function getCollectors(access_token, region) {
+  flowLogCollectors = "";
   if (problem) return null;
-  var region = await getRegion();
-  console.log(region);
-  if (region == "q") return "q";
+
   await axios({
     method: "get",
     headers: { Authorization: "Bearer " + access_token },
@@ -48,28 +47,32 @@ async function getCollectors(apiKey) {
       ".iaas.cloud.ibm.com/v1/flow_log_collectors?version=2020-06-30&generation=2"
   })
     .then(async res => {
-      await formatCollectors(res.data.flow_log_collectors);
+      flowLogCollectors = res.data.flow_log_collectors;
     })
     .catch(error => {
       console.log(error);
       problem = true;
     });
   if (problem) return null;
-  return [bucketName, regionEndpoint];
+  regionEndpoint = "s3." + region + ".cloud-object-storage.appdomain.cloud";
+
+  return flowLogCollectors;
 }
 //getting region
-function getRegion() {
+function getRegion(regionOption) {
+  var regionEndpoint = "";
   do {
     var loop = false;
-    var region = readline.question(`
+    if (regionOption == null) {
+      regionOption = readline.question(`
     Select Region
         1. US South
         2. US East
         3. United Kingdom
         4. EU Germany
         \n`);
-
-    switch (region) {
+    }
+    switch (regionOption) {
       case "1":
         region = "us-south";
         break;
@@ -87,15 +90,16 @@ function getRegion() {
         break;
       default:
         console.log("Invalid region");
+
+        regionOption = null;
         loop = true;
     }
-    regionEndpoint = "s3." + region + ".cloud-object-storage.appdomain.cloud";
   } while (loop == true);
-
-  return region;
+  regionEndpoint = "s3." + region + ".cloud-object-storage.appdomain.cloud";
+  return [region, regionEndpoint];
 }
 // styling the json data
-async function formatCollectors(collectors) {
+function formatCollectors(collectors, option) {
   var i = 1;
   if (collectors.length > 0) console.log("name        bucket");
   for (var item in collectors) {
@@ -104,29 +108,37 @@ async function formatCollectors(collectors) {
         ". " +
         collectors[item].name +
         "  " +
-        collectors[item].storage_bucket
-          .name /*+"  "+collectors[item].target.name+" "+collectors[item].target.resource_type*/
+        collectors[item].storage_bucket.name
     );
     i++;
   }
   if (collectors.length == 1) bucketName = collectors[0].storage_bucket.name;
   else if (collectors.length > 0) {
-    var option = 1;
     do {
       if (
         isNaN(option) ||
         option == "" ||
         option < 1 ||
-        option > collectors.length
-      )
-        console.log("Invalid option.\n");
-      option = readline.question(
-        `
+        option > collectors.length ||
+        option == null
+      ) {
+        option = readline.question(
+          `
             Select a bucket from 1 to ` +
-          collectors.length +
-          `:
+            collectors.length +
+            `:
                 \n`
-      );
+        );
+        if (
+          isNaN(option) ||
+          option == "" ||
+          option < 1 ||
+          option > collectors.length ||
+          option == null
+        ) {
+          console.log("Invalid option.\n");
+        }
+      }
     } while (
       isNaN(option) ||
       option == "" ||
@@ -134,10 +146,26 @@ async function formatCollectors(collectors) {
       option > collectors.length
     );
     bucketName = collectors[option - 1].storage_bucket.name;
+    console.log(bucketName);
+    return bucketName;
   } else {
     console.log("No Flow Log Collectors Found".yellow);
     problem = true;
   }
 }
+async function main(apikey) {
+  var access_token = await getTokens(apikey);
+  var regionAndEndpoint = getRegion();
+  var region = regionAndEndpoint[0];
+  var endpoint = regionAndEndpoint[1];
+  var flowLogCollectors = await getCollectors(access_token, region);
+  var bucketName = formatCollectors(flowLogCollectors);
 
+  return [bucketName, endpoint];
+}
 module.exports = getCollectors;
+module.exports.getRegion = getRegion;
+module.exports.getTokens = getTokens;
+module.exports.main = main;
+module.exports.getCollectors = getCollectors;
+module.exports.formatCollectors = formatCollectors;

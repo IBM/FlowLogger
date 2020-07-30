@@ -253,5 +253,5 @@ function main(){
 }
 
 //module.exports.main = main;
-module.exports = {main};
+module.exports = {main,filter_by,time_elapsed};
 //main()
