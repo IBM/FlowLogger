@@ -1,7 +1,11 @@
 # MAINTAINERS
 
-Scott Wyman Neagle - scottwn@ibm.com
+Ryan Rahman - ryan.rahman@ibm.com
 
-Vidhi Shah - vidhi.shah@ibm.com
+Ayman Naji - ayman.naji@ibm.com
 
-Jiawei He - jiawei.he@ibm.com
+Bokai Li - bokai.li.ibm.com
+
+Daroush Renoit - daroush.renoit@ibm.com
+
+Rebecca Rozansky - rebecca.rozansky@ibm.com
