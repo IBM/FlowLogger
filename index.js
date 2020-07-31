@@ -29,37 +29,10 @@ const main = async function () {
 
     switch (option) {
       case "1":
-    
-      var worked = loadENV();
-      /*
-      const apiPath = 'apikey.txt';
-        try {
-          if (fs.existsSync(apiPath)) {
-            //file exists
-            var key = fs.readFileSync(apiPath, 'utf8');
-            console.log(key.length);
-            config.apiKeyId = key;
-          }
-          else{
-            //file doesn't exist
-            config.apiKeyId = readline.question(`Please enter your API Key: \n`);
-            fs.writeFileSync(apiPath, config.apiKeyId); //will write file if it doesn't exist
-          }
-        } catch(err) {
-          console.error(err);
-        } 
-        
-        */
-    
-    
-      
-        // Get bucketName and region endpoint
-        //const collectors = await getCollectors(config.apiKeyId);
-        //const bucketName = collectors[0];
-        //config.endpoint = collectors[1];
-        //fs.appendFileSync(envPath, BUCKETNAME+bucketName+'\n');
-
-        // Retrieve all items from the COS bucket
+      if(process.env.API_KEY == ""){//if env file is empty
+        var setENV = await loadENV();
+      }
+        // Retrieve all items from the COS bucket using .env 
         config.apiKeyId = process.env.API_KEY;
         config.endpoint = process.env.ENDPOINT;
         var cosClient = new myCOS.S3(config);

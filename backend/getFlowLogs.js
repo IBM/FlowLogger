@@ -13,6 +13,7 @@ require('dotenv').config(); //need for env
 
 // getting token to perform api requests
 async function getTokens(apikey) {
+  //console.log("im in getTokens");
   var access_token = "";
   await axios({
     method: "post",
@@ -38,7 +39,7 @@ async function getTokens(apikey) {
 }
 // collecting available flow log collectors for specified region
 async function getCollectors(access_token, region) {
-  console.log("im at getcollectors");
+  //console.log("im at getcollectors");
   flowLogCollectors = "";
   if (problem) return null;
 
@@ -169,45 +170,31 @@ async function loadENV()
   try {
     if (fs.existsSync(envPath)) {
       //file exists
-      /*console.log(process.env['API_KEY']);
-      config.apiKeyId = process.env['API_KEY'];
-      config.endpoint = process.env['ENDPOINT'];
-      bucketName = process.env['BUCKET_NAME'];
-      region = process.env['REGION'];
-      */
-     console.log(process.env.API_KEY);
+     /*
+      console.log(process.env.API_KEY);
      console.log(process.env.REGION);
      console.log(process.env.ENDPOINT);
      console.log(process.env.BUCKET_NAME);
+      */
 
-     if(process.env.API_KEY == "")
-     {
+      //set api key to env
       process.env.API_KEY = readline.question(`Please enter your API Key: \n`); 
-     }
-     if(process.env.REGION == "")
-     {
+      //set region to env 
       var regionArr = getRegion();
       process.env.REGION = regionArr[0];
       process.env.ENDPOINT = regionArr[1];
-     }
-     if(process.env.BUCKET_NAME == "")
-     {
-      console.log("im here");
+      //get token to call getColleectors 
       var access_token = await getTokens(process.env.API_KEY);
+      //set bucket name to env 
       var flowLogCollectors = await getCollectors(access_token, process.env.REGION);
       process.env.BUCKET_NAME = formatCollectors(flowLogCollectors);
 
-      //var flowLogCollectors = await getCollectors(access_token, region);
-      //var bucketName = formatCollectors(flowLogCollectors);
-     }
+      //write variables to .env 
+      fs.writeFileSync(envPath, APIKEY+process.env.API_KEY+'\n');
+      fs.appendFileSync(envPath, REGION+process.env.REGION+'\n');
+      fs.appendFileSync(envPath, ENDPOINT+process.env.ENDPOINT+'\n');
+      fs.appendFileSync(envPath, BUCKETNAME+process.env.BUCKET_NAME+'\n');
      
-     console.log(process.env.API_KEY);
-     console.log(process.env.REGION);
-     console.log(process.env.ENDPOINT);
-     console.log(process.env.BUCKET_NAME);
-     //config.apiKeyId = readline.question(`Please enter your API Key: \n`); 
-     //process.env.API_KEY = config.apiKeyId;
-     //console.log(process.env.API_KEY);
     }
     else{
       //file doesn't exist
