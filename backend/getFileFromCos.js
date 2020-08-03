@@ -1,5 +1,7 @@
 const fs = require("fs");
 const { gzip, ungzip } = require("node-gzip");
+const file_dir =  __dirname.substring(0,__dirname.length-8)
+
 function getData(cos, bucket, itemName) {
   return new Promise(function (resolve, reject) {
     cos.getObject({ Bucket: bucket, Key: itemName }, function (err, data) {
@@ -39,15 +41,15 @@ async function getItem(bucketName, itemName, cosClient) {
   try {
     if (
       fs.existsSync(
-        "./logs/" + bucketName + "/" + fileName.split(".")[0] + ".json"
+        file_dir+"/logs/" + bucketName + "/" + fileName.split(".")[0] + ".json"
       )
     ) {
       console.log(fileName.split(".")[0] + ".json already exists.");
     } else {
       if (fileName.endsWith(".gz")) {
         let decompressed = await ungzip(Buffer.from(objectData.Body));
-        var dir = "./logs";
-        var dir2 = "./logs/" + bucketName;
+        var dir = file_dir+"/logs";
+        var dir2 = file_dir+"/logs/" + bucketName;
         if (!fs.existsSync(dir)) {
           fs.mkdirSync(dir);
         }

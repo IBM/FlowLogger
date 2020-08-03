@@ -6,9 +6,11 @@ const path = require('path');
 const process = require("process");
 const readline = require('readline-sync');
 const { time } = require('console');
-var file_dir = "./logs"; //directory of the folder where json files are
-const logFolder = './logs';
-
+const { send } = require('process');
+var file_dir = __dirname+"/logs"; //directory of the folder where json files are
+const logFolder = __dirname+'/logs';
+var send_to_folder = 'n';
+var new_folder = file_dir;
 //Pulls all of the different values in a json file from the selectetd folder and returns an array
 function getFilters(){
     let files = fs.readdirSync(file_dir)
@@ -32,6 +34,8 @@ function getFilters(){
 
 //Asks the user what attributes they want to filter the json files by
 function get_attributes(){
+    send_to_folder = readline.question("Do you want to send the filtered logs to a seperate folder? y/n")
+
     filter_arr = getFilters()
     var keys = []
     var count = 0;
@@ -93,6 +97,17 @@ function get_attributes(){
         }
         filters.push(filter)
     }
+    if(send_to_folder==='y'){
+        let temp_name = attributes[0]
+        let count = 1
+        while(temp_name.length<=20&&attributes.length!==count){
+            temp_name += attributes[count]
+            count++
+        }
+    
+        new_folder = file_dir + "-" + temp_name;
+        fs.mkdirSync(new_folder)
+    }
     readfiles(attributes,filters)
 }
 
@@ -111,7 +126,13 @@ function readfiles(attributes,filters){
                 
                 if(filter_by(flow_log,attributes,filters)){
                     console.log("The file "+file+" fits the attributes")
+                    if(send_to_folder==='y'){
+                        //console.log(file+" "+new_folder)
+                        fs.copyFileSync(file_dir+"/"+file, path.join(new_folder,file_dir+"/"+file))
+                        console.log("File moved to "+new_folder)
+                    }
                 }
+
             }
         }
     });
@@ -180,6 +201,10 @@ function time_filter(){
     var time_zone=0;
     var start_time;
     var end_time;
+
+    send_to_folder = readline.question("Do you want to send the filtered logs to a seperate folder? y/n")
+
+
     if(option==='1'){
         time_zone = readline.question("Input the time shift you want from GMT i.e. -5 for EST")
         start_time = readline.question("Choose the start date of the flow logs in YYYY-MM-DD format: ")
@@ -209,6 +234,10 @@ function time_filter(){
     if(option==='3'||option==='q'){
         return;
     }
+    if(send_to_folder==='y'){
+        new_folder = file_dir+'-'+start_time.toISOString()+'_'+end_time.toISOString()
+        fs.mkdirSync(file_dir+'-'+start_time.toISOString()+'_'+end_time.toISOString())
+    }
     let files = fs.readdirSync(file_dir)
     files.forEach(function(file){
         var fromPath = path.join(file_dir,file)
@@ -220,6 +249,10 @@ function time_filter(){
                 
                 if(time_elapsed(flow_log,start_time,end_time)){
                     console.log("The file "+file+" is in the time range")
+                    if(send_to_folder==='y'){
+                        fs.copyFileSync(file_dir+"/"+file, path.join(new_folder,file))
+                        console.log("File moved to "+new_folder)
+                    }
                 }
             }
         }
@@ -227,6 +260,23 @@ function time_filter(){
    
 }
 function main(){
+    console.log((__dirname))
+
+    var folder_log = []
+    let count = 1
+    let files = fs.readdirSync(file_dir)
+    files.forEach(function(folder){
+        var fromPath = path.join(file_dir,folder)
+        stat_folder = fs.statSync(fromPath)
+        if(!stat_folder.isFile()){
+            console.log(count+". "+fromPath)
+            count++
+            folder_log.push(fromPath)
+        }
+    });
+    var selection = readline.question("Select the number of the folder you want to analyze from: ")
+    file_dir = folder_log[selection-1]
+
     var option;
     do{
         option = readline.question(`choose option
