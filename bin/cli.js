@@ -12,6 +12,7 @@ const getFlowLog = require("../index.js").main;
 const parse = require("../flow_parse.js").input;
 const getLogErrors = require("../backend/getLogErrors.js");
 const clearLogs = require("../functions/clearLogs.js").clearLogs;
+const { loadENV } = require("../backend/getFlowLogs"); 
 const filter1 = require("../log_select.js");
 function printHelp() {
   let overview = "OVERVIEW: \n\t";
@@ -47,6 +48,7 @@ const main = async function() {
         3. (scan) check for errors
         4. (clear) delete flowlogs
         5. (filter) through log folder
+        6. (load) enviromental variables
         q. exit
         \n`);
     console.log(option);
@@ -69,14 +71,19 @@ const main = async function() {
       case "4":
       case "clear":
       case "Clear":
-        clearLogs();
+        console.log(clearLogs());
         break;
       case "5":
       case "filter":
       case "Filter":
         filter1.main();
         break;
-
+    case "6":
+      case "load":
+      case "Load":
+       loadENV();
+        break;
+ 
       case "q":
         console.log("exiting...\n\n\n\n\n");
         option = -1;
@@ -97,11 +104,13 @@ switch (process.argv[2]) {
     getLogErrors();
     break;
   case "clear":
-    clearLogs();
+    console.log(clearLogs());
     break;
   case "filter":
     filter1.main();
     break;
+  case 'load':
+      loadENV();
   case "-v":
     console.log("flowlog version: " + version);
     break;
