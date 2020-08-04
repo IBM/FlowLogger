@@ -22,14 +22,12 @@ test("folder doesn't exist", () => {
 });
 test("selecting a file", () => {
   fs.mkdirSync(logFolder);
-
+  var data = `{
+    "test": "file"
+     }`;
+  var fileName = logFolder + "/testfile" + (i + 1) + ".json";
   for (i = 0; i < 5; i++) {
-    fs.writeFileSync(
-      logFolder + "/testfile" + (i + 1) + ".json",
-      `{
-      "test": "file"
-       }`
-    );
+    fs.writeFileSync(fileName, data);
   }
 
   expect(selectLog(3)).toBeDefined();
