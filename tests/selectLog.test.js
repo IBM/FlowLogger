@@ -25,8 +25,9 @@ test("selecting a file", () => {
   var data = `{
     "test": "file"
      }`;
-  var fileName = logFolder + "/testfile" + (i + 1) + ".json";
+  var fileName = "";
   for (i = 0; i < 5; i++) {
+    fileName = logFolder + "/testfile" + (i + 1) + ".json";
     fs.writeFileSync(fileName, data);
   }
 

@@ -24,9 +24,10 @@ test("clear log folder doesn't exist", () => {
 });
 test("clear log folder deleting 5 files", () => {
   fs.mkdirSync(logFolder);
-
+  var fileName = "";
   for (i = 0; i < 5; i++) {
-    fs.writeFileSync(logFolder + "/testfile" + (i + 1) + ".json");
+    fileName = logFolder + "/testfile" + (i + 1) + ".json";
+    fs.writeFileSync(fileName);
   }
   expect(clearLogs()).toBe("All files have been cleared\n".yellow);
 });
