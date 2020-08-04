@@ -20,9 +20,10 @@ const { env } = require('process');
 
 
 const main = async function () {
-  do {
-    var option;
-    option = readline.question(`choose option
+  var option;
+  while (true) {
+    if (option != "wait")
+      option = readline.question(`choose option
         1. get flowlogs
         q. exit
         \n`);
@@ -39,10 +40,9 @@ const main = async function () {
         await getCOS.getBucketContents(process.env.BUCKET_NAME, cosClient); 
         break;
 
-    case "q":
-        console.log("exiting...\n\n\n\n\n");
-        option = -1;
-        break;
+      case "q":
+        console.log("returning...\n\n\n\n\n");
+        return;
 
     default:
         console.log("invalid option\n\n\n\n\n");

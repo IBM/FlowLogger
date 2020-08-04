@@ -49,6 +49,7 @@ Prior to creating a flow log collector, ensure that you have met the following p
 - Make sure that at least one VPC, a subnet, and a virtual server instance exist. 
 - Make sure that a COS instance with a bucket exists for your flow logs. 
 
+
 To complete the prerequisites follow the steps on https://cloud.ibm.com/docs/vpc?topic=vpc-ordering-flow-log-collector#fl-before-you-begin
 
 Make sure to know the region of the COS as thats how the app lists out the COS buckets 
@@ -57,10 +58,12 @@ Make sure to know the region of the COS as thats how the app lists out the COS b
 
 - Must have node js installed.
 - Install node js with `brew install node`.
-- Run `npm install readline-sync` in the project directory. This package allows an easy way to obtain user input.
-- Run `npm install axios ibm-cos-sdk qs` in the project directory
-- Run `npm install chalk clear figlet colors` in the project directory
-- Run `sudo npm install -g .` to package the program as a global command
+- After cloning the repo, run cd acl-logs to change your directory to the project directory.
+- Run npm install in the project directory.
+- Run sudo npm install -g . to package the program as a global command
+- In the package.json file, under scripts, set the test attribute value to jest
+- Run npm test in terminal to exectue tests
+
 
 #### Commands
 

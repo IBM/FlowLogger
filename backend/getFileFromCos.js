@@ -1,5 +1,7 @@
 const fs = require("fs");
 const { gzip, ungzip } = require("node-gzip");
+const file_dir =  __dirname.substring(0,__dirname.length-8)
+
 function getData(cos, bucket, itemName) {
   return new Promise(function (resolve, reject) {
     cos.getObject({ Bucket: bucket, Key: itemName }, function (err, data) {
@@ -11,39 +13,61 @@ function getData(cos, bucket, itemName) {
     });
   });
 }
-function getBucketContents(bucketName, cosClient) {
+
+async function getBucketContents(bucketName, cosClient) {
   console.log(`Retrieving bucket contents from: ${bucketName}`);
   return cosClient
     .listObjects({ Bucket: bucketName })
     .promise()
     .then(async (data) => {
-      if (data != null && data.Contents != null) {
+      let promises = [];
+      if (data != null && data.Contents != null)
         for (var i = 0; i < data.Contents.length; i++) {
-          if (i == data.Contents.length - 1)
-            await getItem(bucketName, data.Contents[i].Key, cosClient);
-          else getItem(bucketName, data.Contents[i].Key, cosClient);
+          promises.push(getItem(bucketName, data.Contents[i].Key, cosClient));
         }
-      }
+      console.log("Found " + promises.length + " items.");
+      await Promise.all(promises).then(() => {
+        console.log(`All logs are written to ./logs/${bucketName}/`);
+      });
     })
     .catch((e) => {
       console.error(`ERROR: ${e.code} - ${e.message}\n`.red);
     });
 }
-
 async function getItem(bucketName, itemName, cosClient) {
   let objectData = await getData(cosClient, bucketName, itemName);
   itemName = itemName.split("/");
   let fileName = itemName[itemName.length - 1];
-  if (fileName.endsWith(".gz")) {
-    let decompressed = await ungzip(Buffer.from(objectData.Body));
-    fs.writeFile(
-      "./logs/" + fileName.split(".")[0] + ".json",
-      decompressed,
-      function (err) {
-        if (err) return console.log(err);
-        console.log(fileName.split(".")[0] + ".json Written Successfully.");
+  try {
+    if (
+      fs.existsSync(
+        file_dir+"/logs/" + bucketName + "/" + fileName.split(".")[0] + ".json"
+      )
+    ) {
+      console.log(fileName.split(".")[0] + ".json already exists.");
+    } else {
+      if (fileName.endsWith(".gz")) {
+        let decompressed = await ungzip(Buffer.from(objectData.Body));
+        var dir = file_dir+"/logs";
+        var dir2 = file_dir+"/logs/" + bucketName;
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir);
+        }
+        if (!fs.existsSync(dir2)) {
+          fs.mkdirSync(dir2);
+        }
+        fs.writeFile(
+          dir2 + "/" + fileName.split(".")[0] + ".json",
+          decompressed,
+          function (err) {
+            if (err) console.log(err);
+            console.log(fileName.split(".")[0] + ".json Written Successfully.");
+          }
+        );
       }
-    );
+    }
+  } catch (err) {
+    console.error(err);
   }
 }
 exports.getBucketContents = getBucketContents;
