@@ -1,5 +1,5 @@
 //Outputs Date and Time in a more readable format
-const logFolder = "./logs";
+const logFolder = __dirname+"/logs";
 const fs = require("fs");
 const { time } = require("console");
 var flow_log;
@@ -15,9 +15,11 @@ function selectLog(){
     let count=0;
     var files={};
     fs.readdirSync(logFolder).forEach(file => {
-        files[count]=file;
-        console.log(count+". "+file);
-        count++;
+        if(file.includes('.json')){
+            files[count]=file;
+            console.log(count+". "+file);
+            count++;
+        }
     });
     var selection = readline.question(`\nselect log\n`);
     if(selection=='q'){
@@ -30,7 +32,7 @@ function selectLog(){
         }
     }
     if(selection>=0 && selection<count){
-        return "./logs/"+files[selection];
+        return __dirname+"/logs/"+files[selection];
     }
 }
 //Outputs flow logs that match the filter requirement of an attribute given by the user
