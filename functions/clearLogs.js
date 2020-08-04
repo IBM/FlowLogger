@@ -4,11 +4,9 @@ const logFolder = "./logs";
 var problem = false;
 function clearLogs() {
   if (!fs.existsSync(logFolder)) {
-    console.log("Error, folder does not exist".red);
-    return;
+    return "Error, folder does not exist\n".red;
   } else if (fs.readdirSync(logFolder).length == 0) {
-    console.log("Folder is already empty\n".yellow);
-    return;
+    return "Folder is already empty\n".yellow;
   }
   fs.readdirSync(logFolder).forEach(file => {
     try {
@@ -18,9 +16,8 @@ function clearLogs() {
     }
   });
   if (problem) {
-    console.log("Error, returning to home prompt...".red);
-    return;
+    return "Error, returning to home prompt...".red;
   }
-  console.log("All files have been cleared\n".yellow);
+  return "All files have been cleared\n".yellow;
 }
 module.exports.clearLogs = clearLogs;
