@@ -12,9 +12,11 @@ const getFlowlogs = require("./backend/getFlowLogs").main;
 const getCOS = require("./backend/getFileFromCos");
 const { getRegion } = require("./backend/getFlowLogs");
 const { getCollectors } = require("./backend/getFlowLogs");
+const { getTokens } = require("./backend/getFlowLogs");
 const { formatCollectors } = require("./backend/getFlowLogs");
-const { loadENV } = require("./backend/getFlowLogs");
+const { loadAPI } = require("./backend/getFlowLogs");
 const { env } = require('process');
+const { ConfigurationOptions } = require('ibm-cos-sdk/lib/config');
 
 
 
@@ -33,18 +35,26 @@ const main = async function () {
       const envPath = '.env';
       if (fs.existsSync(envPath)) {
         if(process.env.API_KEY == ""){//if env file is empty
-          var setENV = await loadENV();
+          var setAPI = await loadAPI();
         }
       }
       else{
-        var setENV = await loadENV();
+        var setAPI = await loadAPI();
       }
-      
+
+      var regionArr = getRegion();
+      var region = regionArr[0];
+      config.endpoint = regionArr[1];
+      //get token to call getColleectors 
+      var access_token = await getTokens(process.env.API_KEY);
+      //set bucket name to env 
+      var flowLogCollectors = await getCollectors(access_token, region);
+      var bucket_name = formatCollectors(flowLogCollectors);
+    
         // Retrieve all items from the COS bucket using .env 
         config.apiKeyId = process.env.API_KEY;
-        config.endpoint = process.env.ENDPOINT;
         var cosClient = new myCOS.S3(config);
-        await getCOS.getBucketContents(process.env.BUCKET_NAME, cosClient); 
+        await getCOS.getBucketContents(bucket_name, cosClient); 
         break;
 
       case "q":
