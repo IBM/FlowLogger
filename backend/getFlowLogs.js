@@ -3,13 +3,17 @@ const colors = require("colors");
 
 const axios = require("axios");
 const qs = require("qs");
-
+const fs = require('fs');
 var bucketName = "";
 var problem = false;
 
 var region = "";
+
+require('dotenv').config(); //need for env 
+
 // getting token to perform api requests
 async function getTokens(apikey) {
+  //console.log("im in getTokens");
   var access_token = "";
   await axios({
     method: "post",
@@ -35,6 +39,7 @@ async function getTokens(apikey) {
 }
 // collecting available flow log collectors for specified region
 async function getCollectors(access_token, region) {
+  //console.log("im at getcollectors");
   flowLogCollectors = "";
   if (problem) return null;
 
@@ -106,7 +111,7 @@ function formatCollectors(collectors, option) {
     console.log(
       i +
         ". " +
-        collectors[item].name +
+        collectors[item].storage_bucket.name +
         "  " +
         collectors[item].storage_bucket.name
     );
@@ -153,6 +158,69 @@ function formatCollectors(collectors, option) {
     problem = true;
   }
 }
+
+async function loadENV()
+{
+  const envPath = '.env';
+  const APIKEY = "API_KEY=";
+  const REGION = "REGION=";
+  const ENDPOINT = "ENDPOINT=";
+  const BUCKETNAME = "BUCKET_NAME=";
+
+  try {
+    if (fs.existsSync(envPath)) {
+      //file exists
+     /*
+      console.log(process.env.API_KEY);
+     console.log(process.env.REGION);
+     console.log(process.env.ENDPOINT);
+     console.log(process.env.BUCKET_NAME);
+      */
+
+      //set api key to env
+      process.env.API_KEY = readline.question(`Please enter your API Key: \n`); 
+      //set region to env 
+      var regionArr = getRegion();
+      process.env.REGION = regionArr[0];
+      process.env.ENDPOINT = regionArr[1];
+      //get token to call getColleectors 
+      var access_token = await getTokens(process.env.API_KEY);
+      //set bucket name to env 
+      var flowLogCollectors = await getCollectors(access_token, process.env.REGION);
+      process.env.BUCKET_NAME = formatCollectors(flowLogCollectors);
+
+      //write variables to .env 
+      fs.writeFileSync(envPath, APIKEY+process.env.API_KEY+'\n');
+      fs.appendFileSync(envPath, REGION+process.env.REGION+'\n');
+      fs.appendFileSync(envPath, ENDPOINT+process.env.ENDPOINT+'\n');
+      fs.appendFileSync(envPath, BUCKETNAME+process.env.BUCKET_NAME+'\n');
+     
+    }
+    else{
+      //file doesn't exist
+      config.apiKeyId = readline.question(`Please enter your API Key: \n`); 
+      //fs.writeFileSync(envPath, APIKEY+config.apiKeyId+'\n'); //will write file if it doesn't exist 
+      process.env.API_KEY = config.apiKeyId;
+      //console.log("getregion");
+      console.log(process.env.API_KEY);
+      var regionArr = getRegion();
+      region = regionArr[0];
+      config.endpoint = regionArr[1];
+      console.log(region);
+      console.log(config.endpoint);
+      const collectors = getCollectors(config.apiKeyId, region);
+      bucketName = collectors[0];
+
+      fs.appendFileSync(envPath, REGION+region+'\n');
+      fs.appendFileSync(envPath, ENDPOINT+config.endpoint+'\n');
+      fs.appendFileSync(envPath, BUCKETNAME+bucketName+'\n');
+
+    }
+  } catch(err) {
+    console.error(err);
+  } 
+  return "it worked";
+}
 async function main(apikey) {
   var access_token = await getTokens(apikey);
   var regionAndEndpoint = getRegion();
@@ -163,9 +231,10 @@ async function main(apikey) {
 
   return [bucketName, endpoint];
 }
-module.exports = getCollectors;
+
 module.exports.getRegion = getRegion;
 module.exports.getTokens = getTokens;
 module.exports.main = main;
+module.exports.loadENV = loadENV;
 module.exports.getCollectors = getCollectors;
 module.exports.formatCollectors = formatCollectors;
