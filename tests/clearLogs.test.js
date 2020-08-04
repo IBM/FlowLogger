@@ -22,12 +22,3 @@ test("clear log folder doesn't exist", () => {
 
   expect(clearLogs()).toBe("Error, folder does not exist\n".red);
 });
-test("clear log folder deleting 5 files", () => {
-  fs.mkdirSync(logFolder);
-  var fileName = "";
-  for (i = 0; i < 5; i++) {
-    fileName = logFolder + "/testfile" + (i + 1) + ".json";
-    fs.writeFileSync(fileName);
-  }
-  expect(clearLogs()).toBe("All files have been cleared\n".yellow);
-});

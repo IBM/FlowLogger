@@ -20,16 +20,3 @@ test("folder doesn't exist", () => {
 
   expect(selectLog()).toBe(null);
 });
-test("selecting a file", () => {
-  fs.mkdirSync(logFolder);
-  var data = `{
-    "test": "file"
-     }`;
-  var fileName = "";
-  for (i = 0; i < 5; i++) {
-    fileName = logFolder + "/testfile" + (i + 1) + ".json";
-    fs.writeFileSync(fileName, data);
-  }
-
-  expect(selectLog(3)).toBeDefined();
-});
