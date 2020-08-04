@@ -30,9 +30,16 @@ const main = async function () {
 
     switch (option) {
       case "1":
-      if(process.env.API_KEY == ""){//if env file is empty
+      const envPath = '.env';
+      if (fs.existsSync(envPath)) {
+        if(process.env.API_KEY == ""){//if env file is empty
+          var setENV = await loadENV();
+        }
+      }
+      else{
         var setENV = await loadENV();
       }
+      
         // Retrieve all items from the COS bucket using .env 
         config.apiKeyId = process.env.API_KEY;
         config.endpoint = process.env.ENDPOINT;
