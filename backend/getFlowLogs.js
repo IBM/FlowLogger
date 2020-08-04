@@ -170,12 +170,6 @@ async function loadENV()
   try {
     if (fs.existsSync(envPath)) {
       //file exists
-     /*
-      console.log(process.env.API_KEY);
-     console.log(process.env.REGION);
-     console.log(process.env.ENDPOINT);
-     console.log(process.env.BUCKET_NAME);
-      */
 
       //set api key to env
       process.env.API_KEY = readline.question(`Please enter your API Key: \n`); 
@@ -198,29 +192,28 @@ async function loadENV()
     }
     else{
       //file doesn't exist
-      config.apiKeyId = readline.question(`Please enter your API Key: \n`); 
-      //fs.writeFileSync(envPath, APIKEY+config.apiKeyId+'\n'); //will write file if it doesn't exist 
-      process.env.API_KEY = config.apiKeyId;
-      //console.log("getregion");
-      console.log(process.env.API_KEY);
+      process.env.API_KEY = readline.question(`Please enter your API Key: \n`); 
+      fs.writeFileSync(envPath, APIKEY+process.env.API_KEY+'\n'); //will write file if it doesn't exist 
+      
       var regionArr = getRegion();
-      region = regionArr[0];
-      config.endpoint = regionArr[1];
-      console.log(region);
-      console.log(config.endpoint);
-      const collectors = getCollectors(config.apiKeyId, region);
-      bucketName = collectors[0];
+      process.env.REGION = regionArr[0];
+      process.env.ENDPOINT = regionArr[1];
+      
+      var access_token = await getTokens(process.env.API_KEY);
+      var flowLogCollectors = await getCollectors(access_token, process.env.REGION);
+      process.env.BUCKET_NAME = formatCollectors(flowLogCollectors);
 
-      fs.appendFileSync(envPath, REGION+region+'\n');
-      fs.appendFileSync(envPath, ENDPOINT+config.endpoint+'\n');
-      fs.appendFileSync(envPath, BUCKETNAME+bucketName+'\n');
+      fs.appendFileSync(envPath, REGION+process.env.REGION+'\n');
+      fs.appendFileSync(envPath, ENDPOINT+process.env.ENDPOINT+'\n');
+      fs.appendFileSync(envPath, BUCKETNAME+process.env.BUCKET_NAME+'\n');
 
     }
   } catch(err) {
     console.error(err);
   } 
-  return "it worked";
+  return;
 }
+
 async function main(apikey) {
   var access_token = await getTokens(apikey);
   var regionAndEndpoint = getRegion();

@@ -40,19 +40,19 @@ Prior to creating a flow log collector, ensure that you have met the following p
 
     For more details, see our [Resources](#resources) section for a detailed IBM Cloud documentation on IBM Cloud VPCs and Flow Logs.
 
+
     Make sure to note the region of the COS that contains your flow logs, considering that is what you are prompted for when the CLI pulls them to your local depository.
 
 #### Terminal Prerequisites
 
 - Must have node js installed.
-
 - Install node js with `brew install node`.
 - After cloning the repo, run `cd acl-logs` to change your directory to the project directory.
 - Run `npm install` in the project directory.
 - Run `sudo npm install -g .` to package the program as a global command
-
 - In the package.json file, under `scripts`, set the `test` attribute value to `jest`
 - run `npm test` in terminal to exectue tests
+
 
 #### Commands
 
