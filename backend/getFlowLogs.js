@@ -159,13 +159,11 @@ function formatCollectors(collectors, option) {
   }
 }
 
-async function loadENV()
+async function loadAPI()
 {
   const envPath = '.env';
   const APIKEY = "API_KEY=";
-  const REGION = "REGION=";
-  const ENDPOINT = "ENDPOINT=";
-  const BUCKETNAME = "BUCKET_NAME=";
+  
 
   try {
     if (fs.existsSync(envPath)) {
@@ -173,21 +171,10 @@ async function loadENV()
 
       //set api key to env
       process.env.API_KEY = readline.question(`Please enter your API Key: \n`); 
-      //set region to env 
-      var regionArr = getRegion();
-      process.env.REGION = regionArr[0];
-      process.env.ENDPOINT = regionArr[1];
-      //get token to call getColleectors 
-      var access_token = await getTokens(process.env.API_KEY);
-      //set bucket name to env 
-      var flowLogCollectors = await getCollectors(access_token, process.env.REGION);
-      process.env.BUCKET_NAME = formatCollectors(flowLogCollectors);
+   
 
       //write variables to .env 
       fs.writeFileSync(envPath, APIKEY+process.env.API_KEY+'\n');
-      fs.appendFileSync(envPath, REGION+process.env.REGION+'\n');
-      fs.appendFileSync(envPath, ENDPOINT+process.env.ENDPOINT+'\n');
-      fs.appendFileSync(envPath, BUCKETNAME+process.env.BUCKET_NAME+'\n');
      
     }
     else{
@@ -195,18 +182,6 @@ async function loadENV()
       process.env.API_KEY = readline.question(`Please enter your API Key: \n`); 
       fs.writeFileSync(envPath, APIKEY+process.env.API_KEY+'\n'); //will write file if it doesn't exist 
       
-      var regionArr = getRegion();
-      process.env.REGION = regionArr[0];
-      process.env.ENDPOINT = regionArr[1];
-      
-      var access_token = await getTokens(process.env.API_KEY);
-      var flowLogCollectors = await getCollectors(access_token, process.env.REGION);
-      process.env.BUCKET_NAME = formatCollectors(flowLogCollectors);
-
-      fs.appendFileSync(envPath, REGION+process.env.REGION+'\n');
-      fs.appendFileSync(envPath, ENDPOINT+process.env.ENDPOINT+'\n');
-      fs.appendFileSync(envPath, BUCKETNAME+process.env.BUCKET_NAME+'\n');
-
     }
   } catch(err) {
     console.error(err);
@@ -228,6 +203,6 @@ async function main(apikey) {
 module.exports.getRegion = getRegion;
 module.exports.getTokens = getTokens;
 module.exports.main = main;
-module.exports.loadENV = loadENV;
+module.exports.loadAPI = loadAPI;
 module.exports.getCollectors = getCollectors;
 module.exports.formatCollectors = formatCollectors;
