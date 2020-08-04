@@ -1,9 +1,10 @@
 //Outputs Date and Time in a more readable format
-const logFolder = "./logs";
+var logFolder = __dirname+"/logs";
 const fs = require("fs");
 const { time } = require("console");
 var flow_log;
 const readline = require("readline-sync");
+const path = require('path');
 
 function date_time(date) {
   var arr = date.split("T");
@@ -12,12 +13,29 @@ function date_time(date) {
 
 //Function made by Daroush that allows the user to select a certain log by number from the logs folder
 function selectLog(){
-    let count=0;
-    var files={};
+    let count = 1
+    let files = fs.readdirSync(logFolder)
+    var folder_log = []
+    files.forEach(function(folder){
+        var fromPath = path.join(logFolder,folder)
+        stat_folder = fs.statSync(fromPath)
+        if(!stat_folder.isFile()){
+            console.log(count+". "+fromPath)
+            count++
+            folder_log.push(fromPath)
+        }
+    });
+    var selection = readline.question("Select the number of the folder you want to analyze from: ")
+    logFolder = folder_log[selection-1]
+
+    count=0;
+    var files2={};
     fs.readdirSync(logFolder).forEach(file => {
-        files[count]=file;
-        console.log(count+". "+file);
-        count++;
+        if(file.includes('.json')){
+            files2[count]=file;
+            console.log(count+". "+file);
+            count++;
+        }
     });
     var selection = readline.question(`\nselect log\n`);
     if(selection=='q'){
@@ -30,7 +48,7 @@ function selectLog(){
         }
     }
     if(selection>=0 && selection<count){
-        return "./logs/"+files[selection];
+        return logFolder+"/"+files2[selection];
     }
 }
 //Outputs flow logs that match the filter requirement of an attribute given by the user
