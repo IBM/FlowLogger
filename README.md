@@ -1,6 +1,12 @@
 # FlowLogger
 
-A command line tool for retrieving and parsing IBM Cloud flow logs.
+A command line tool for retrieving and parsing IBM Cloud flow logs, developed by the Global Cloud Acceleration Team (GCAT) Interns:
+
+1. Bokai Li
+2. Daroush Renoit
+3. Rebecca Rozansky
+4. Ryan Rahman
+5. Ayman Naji
 
 ## Contents
 
