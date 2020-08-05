@@ -2,11 +2,11 @@
 
 A command line tool for retrieving and parsing IBM Cloud flow logs, developed by the Global Cloud Acceleration Team (GCAT) Interns:
 
-1. [Bokai Li](https://w3.ibm.com/bluepages/profile.html?uid=3J3716897)
-2. [Daroush Renoit](https://w3.ibm.com/bluepages/profile.html?uid=3J3840897)
-3. [Rebecca Rozansky](https://w3.ibm.com/bluepages/profile.html?uid=4J8111897)
-4. [Ryan Rahman](https://w3.ibm.com/bluepages/profile.html?uid=3J3694897)
-5. [Ayman Naji](https://w3.ibm.com/bluepages/profile.html?uid=3J3712897)
+1. [Bokai Li](https://www.linkedin.com/in/bokaili/)
+2. [Daroush Renoit](https://www.linkedin.com/in/daroush-renoit-672ba4111/)
+3. [Rebecca Rozansky](https://www.linkedin.com/in/rebecca-rozansky-405687184/)
+4. [Ryan Rahman](https://www.linkedin.com/in/ryan-x-rahman/)
+5. [Ayman Naji](https://www.linkedin.com/in/aymannaji/)
 
 ## Contents
 
