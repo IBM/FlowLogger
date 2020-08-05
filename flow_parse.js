@@ -25,7 +25,7 @@ function selectLog(){
             folder_log.push(fromPath)
         }
     });
-    var selection = readline.question("Select the number of the folder you want to analyze from: ")
+    var selection = readline.question("Select the number of the folder you want to analyze from: \n")
     logFolder = folder_log[selection-1]
 
     count=0;
@@ -42,7 +42,7 @@ function selectLog(){
         return
     }
     while(selection<0||selection>=count){
-        selection = readline.question("Not a valid log, enter again")
+        selection = readline.question("Not a valid log, enter again\n")
         if(selection=='q'){
             return
         }
@@ -156,18 +156,18 @@ function main() {
                 }
                 var attributes = [];
                 var filters = [];
-                var amt = readline.question("How many attributes do you want to filter by? Press q to quit")
+                var amt = readline.question("How many attributes do you want to filter by? Press q to quit\n")
                 if(amt=='q'){
                     break;
                 }
                     for(var i=0;i<amt;i++){
-                        var attribute = readline.question(i+1+". Choose an attribute to filter by (type out the name or choose a number): ")
+                        var attribute = readline.question(i+1+". Choose an attribute to filter by (type out the name or choose a number): \n")
                         if(attribute=='q'){
                             break;
                         }
                         if(attribute.length<=2){
                             while(attribute>=22||attribute<=0){
-                                attribute = readline.question("Invalid number choice, choose a new number or q to quit")
+                                attribute = readline.question("Invalid number choice, choose a new number or q to quit\n")
                                 if(attribute==='q'){
                                     break
                                 }
@@ -175,7 +175,7 @@ function main() {
                             attribute = keys[attribute-1]
                         }
                         while(!keys.includes(attribute)){
-                            attribute = readline.question("Please retype the attribute you want to filter by or press q to quit")
+                            attribute = readline.question("Please retype the attribute you want to filter by or press q to quit\n")
                             if(attribute==='q'){
                                 break
                             }
@@ -193,13 +193,13 @@ function main() {
                         for(var j=0;j<unique.length;j++){
                             console.log(String.fromCharCode(97 + j)+". "+unique[j])
                         }
-                        var filter = readline.question(i+1+". Choose the value of that attribute you want to filter by: ")
+                        var filter = readline.question(i+1+". Choose the value of that attribute you want to filter by: \n")
 
                         if(filter>='a'&&filter<=String.fromCharCode(97 + j)){
                             filter = unique[filter.charCodeAt(0) - 97]
                         }
                         while(!unique.includes(filter)){
-                            filter = readline.question("Please retype the filter or press q to quit")
+                            filter = readline.question("Please retype the filter or press q to quit\n")
                             if(filter==='q'){
                                 breakout = true
                                 break
@@ -220,7 +220,7 @@ function main() {
                 break;
 
             case "3":
-                var file_name = readline.question("Type in the file you want to save to: ")
+                var file_name = readline.question("Type in the file you want to save to: \n")
                 if(file_name=='q'){
                     break
                 }
