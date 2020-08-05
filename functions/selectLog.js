@@ -1,12 +1,52 @@
-const logFolder = "./logs";
 const fs = require("fs");
 const readline = require("readline-sync");
 const colors = require("colors");
 
-function selectLog(selection) {
+function selectLog(folderSelection, fileSelection) {
+  var logFolder = "./logs";
   var count = 1;
+  var folders = {};
   var files = {};
   //var selection = 0;
+  if (!fs.existsSync(logFolder)) {
+    console.log("Folder does not exist".yellow);
+    return null;
+  } else if (fs.readdirSync(logFolder).length == 0) {
+    console.log("Folder is empty".yellow);
+    return null;
+  }
+  fs.readdirSync(logFolder).forEach(folder => {
+    folders[count] = folder;
+    console.log(count + ". " + folder);
+    count++;
+  });
+
+  do {
+    if (
+      isNaN(folderSelection) ||
+      folderSelection == "" ||
+      parseInt(folderSelection) <= 0 ||
+      parseInt(folderSelection) >= count
+    ) {
+      folderSelection = readline.question(`\nselect log\n`);
+    }
+    if (
+      isNaN(folderSelection) ||
+      folderSelection == "" ||
+      parseInt(folderSelection) <= 0 ||
+      parseInt(folderSelection) >= count
+    ) {
+      console.log("invalid option");
+    }
+  } while (
+    isNaN(folderSelection) ||
+    folderSelection == "" ||
+    parseInt(folderSelection) <= 0 ||
+    parseInt(folderSelection) >= count
+  );
+  //console.log(folders[folderSelection]);
+  count = 1;
+  logFolder = logFolder + "/" + folders[folderSelection];
 
   if (!fs.existsSync(logFolder)) {
     console.log("Folder does not exist".yellow);
@@ -23,29 +63,29 @@ function selectLog(selection) {
   });
   do {
     if (
-      isNaN(selection) ||
-      selection == "" ||
-      parseInt(selection) <= 0 ||
-      parseInt(selection) >= count
+      isNaN(fileSelection) ||
+      fileSelection == "" ||
+      parseInt(fileSelection) <= 0 ||
+      parseInt(fileSelection) >= count
     ) {
-      selection = readline.question(`\nselect log\n`);
+      fileSelection = readline.question(`\nselect log\n`);
     }
     if (
-      isNaN(selection) ||
-      selection == "" ||
-      parseInt(selection) <= 0 ||
-      parseInt(selection) >= count
+      isNaN(fileSelection) ||
+      fileSelection == "" ||
+      parseInt(fileSelection) <= 0 ||
+      parseInt(fileSelection) >= count
     ) {
       console.log("invalid option");
     }
   } while (
-    isNaN(selection) ||
-    selection == "" ||
-    parseInt(selection) <= 0 ||
-    parseInt(selection) >= count
+    isNaN(fileSelection) ||
+    fileSelection == "" ||
+    parseInt(fileSelection) <= 0 ||
+    parseInt(fileSelection) >= count
   );
 
-  return require("../logs/" + files[selection]);
+  return require("." + logFolder + "/" + files[fileSelection]);
 }
 
 module.exports.selectLog = selectLog;
