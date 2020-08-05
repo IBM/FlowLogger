@@ -5,7 +5,7 @@ const figlet = require("figlet");
 const chalk = require("chalk");
 
 console.log(
-  chalk.yellow(figlet.textSync("Flowlogger", { horizontalLayout: "full" }))
+  chalk.yellow(figlet.textSync("FlowLogger", { horizontalLayout: "full" }))
 );
 
 const getFlowLog = require("../index.js").main;
