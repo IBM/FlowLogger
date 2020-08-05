@@ -91,20 +91,10 @@ function time_elapsed(start_date, end_date) {
 //TODO: add implementation which filters through each of the json files rather than individual ones
 
 function input() {
-  fs.readFile(selectLog(), "utf8", (err, jsonString) => {
-    if (err) {
-      console.log("Error reading file from disk:", err);
-      return;
-    }
-    try {
-      flow_log = JSON.parse(jsonString);
-      main();
-      return;
-    } catch (err) {
-      console.log("Error parsing JSON string:", err);
-      return;
-    }
-  });
+    let input_files = fs.readFileSync(selectLog())
+    flow_log = JSON.parse(input_files);
+    main()
+
 }
 
 function for_mat(flog, tabs) {
@@ -123,6 +113,7 @@ function output(file_name) {
   var format_flow = for_mat(flow_log, "");
 
   console.log(flow_log);
+  //let write_file = fs.writeFileSync()
   fs.writeFile(file_name, format_flow, err => {
     if (err) {
       console.log("Error reading file from disk:", err);
