@@ -17,8 +17,8 @@ test("clear log empty folder", () => {
   }
   expect(clearLogs()).toBe("Folder is already empty\n".yellow);
 });
-test("clear log folder doesn't exist", () => {
+/*test("clear log folder doesn't exist", () => {
   fs.rmdirSync(logFolder);
 
   expect(clearLogs()).toBe("Error, folder does not exist\n".red);
-});
+});*/
