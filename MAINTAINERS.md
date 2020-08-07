@@ -9,3 +9,7 @@
 4. [Ryan Rahman](https://github.com/rahmannoodles98) - rahmanr98@gmail.com
 
 5. [Ayman Naji](https://github.com/Ay1man2) - an443@cornell.edu
+
+6. [Scott Wyman Neagle](https://github.com/scottwn) - scottwn@ibm.com
+
+7. [Nitin Huralikuppi](https://github.com/Nitinhuralikuppi) - nhuralik@us.ibm.com
