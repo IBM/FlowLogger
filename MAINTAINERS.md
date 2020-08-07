@@ -1,11 +1,11 @@
 # MAINTAINERS
 
-Ryan Rahman - ryan.rahman@ibm.com
+1. [Bokai Li](https://github.com/bokai247) - bokai247@gmail.com
 
-Ayman Naji - ayman.naji@ibm.com
+2. [Daroush Renoit](https://github.com/dpeace8) - dpeace8@gmail.com
 
-Bokai Li - bokai.li@ibm.com
+3. [Rebecca Rozansky](https://github.com/rebeccarozansky) - beckybriercreek@gmail.com
 
-Daroush Renoit - daroush.renoit@ibm.com
+4. [Ryan Rahman](https://github.com/rahmannoodles98) - rahmanr98@gmail.com
 
-Rebecca Rozansky - rebecca.rozansky@ibm.com
+5. [Ayman Naji](https://github.com/Ay1man2) - an443@cornell.edu
